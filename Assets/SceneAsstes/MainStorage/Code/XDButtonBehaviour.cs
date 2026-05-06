@@ -1,17 +1,24 @@
+#region Import Libs
 using System.Collections;
 using UnityEngine; using UnityEngine.UI; using UnityEditor; using UnityEngine.SceneManagement;
 using XD.UI;
+#endregion
+#region CustomLibrary
 namespace XD.UI {
     public enum UI_types {
         button,
+        toggleButton,
         switchButton,
-        slider
+        slider,
+        dropdown
     }
     public enum UI_target_types {
         gameObjectsActivity,
         RandomPicker,
         TriggerAnimation,
-        LoadScene
+        LoadScene,
+        StoreIntData,
+        StoreFloatData
     }
     [System.Serializable]
     public class PiledObjects {
@@ -24,7 +31,8 @@ namespace XD.UI {
         public AudioClip Clip;
     }
 }
-
+#endregion
+#region Class
 public class XDButtonBehaviour : MonoBehaviour {
     //General 
     public UI_types type;
@@ -45,69 +53,80 @@ public class XDButtonBehaviour : MonoBehaviour {
     public RandomPullEntry[] RandomPickerEntries;
     public Animator SingleAnimator;
     public string ActionName;
+    public string[] Strings;
 
     //ClassificationVars
     Button myButton;
     Slider mySlider;
-
+    Dropdown myDropdown;
+    //Utility
     AudioSource myAudio;
 
+    //CompileTypes
     void Awake() {
         switch (type) {
-            case UI_types.button : myButton = gameObject.GetComponent<Button>(); break;
-            case UI_types.switchButton : myButton = gameObject.GetComponent<Button>(); break;
+            //Assign Button
+            case UI_types.button : 
+                case UI_types.toggleButton :
+                    case UI_types.switchButton : myButton = gameObject.GetComponent<Button>(); break;
+            //Assign Dropdown
+            case UI_types.dropdown : myDropdown = gameObject.GetComponent<Dropdown>(); break;
+            //Assign Error
+            default:
+                Debug.Log(type + " Doesn't Work within awake assign");
+                break;
         }
     }
+    //PlugAdditionss
     void Start() {
+        //Button
         if (myButton != null) { myButton.onClick.AddListener(() => {ButtonPressed();}); }
-        if (targetMode == UI_target_types.RandomPicker) {
-            myAudio = gameObject.AddComponent<AudioSource>();
-        }
+        //Dropdown
+
+        //Audio
+        if (targetMode == UI_target_types.RandomPicker) { myAudio = gameObject.AddComponent<AudioSource>(); }
     }
     public void ButtonPressed() {
         if (myButton == null) return;
+        //DefaultButton
         if (type == UI_types.button) {
-            if (flipFlopStrat) {
-                if (targetMode == UI_target_types.gameObjectsActivity) {
-                    flipFlopState = !flipFlopState;
-                    foreach (GameObject Obj in DefaultButtonPile.Positive) {
-                        Obj.SetActive(flipFlopState);
-                    }
-                    foreach (GameObject Obj in DefaultButtonPile.Negative) {
-                        Obj.SetActive(!flipFlopState);
-                    }
-                }
-            }
-            else if (targetMode == UI_target_types.RandomPicker) {
+            //RandomPicker (SmexuatinaSounds)
+            if (targetMode == UI_target_types.RandomPicker) {
+                //Pick
                 int RandomRoll = Random.Range(0, RandomPickerEntries.Length);
-                myAudio.Stop();
-                myAudio.PlayOneShot(RandomPickerEntries[RandomRoll].Clip);
+                //PlaySound
+                myAudio.Stop(); myAudio.PlayOneShot(RandomPickerEntries[RandomRoll].Clip);
+                //Animate Glow
                 RandomPickerEntries[RandomRoll].TargetAnimator.SetTrigger("Glow");
-            } else if (targetMode == UI_target_types.TriggerAnimation) {
-                SingleAnimator.SetTrigger(ActionName);
-            } else if (targetMode == UI_target_types.LoadScene) {
-                StartCoroutine(LoadSceneAsync(ActionName));
             }
-        } else {
-            switcherState += 1;
-            if (switcherState > switcherVariants) {
-                switcherState = 1;
+            //SetTrigger on Animator
+            else if (targetMode == UI_target_types.TriggerAnimation) { SingleAnimator.SetTrigger(ActionName); }
+            //Scene manage
+            else if (targetMode == UI_target_types.LoadScene) {
+                //'RunScene' or 'ForceQuit'
+                if (ActionName != "ForceQuit") { StartCoroutine(LoadSceneAsync(ActionName)); } else { Application.Quit(); }
             }
+        } 
+        //ToggleButton
+        else if (type == UI_types.toggleButton) {
+            //ToggleObjects
+            if (targetMode == UI_target_types.gameObjectsActivity) {
+                flipFlopState = !flipFlopState;
+                foreach (GameObject GutObj in DefaultButtonPile.Positive) { GutObj.SetActive(flipFlopState); }
+                foreach (GameObject BadObj in DefaultButtonPile.Negative) { BadObj.SetActive(!flipFlopState); }
+            }
+        } 
+        //SwitcherButton
+        else if (type == UI_types.switchButton) {
+            //AddProfile
+            if (switcherState > switcherVariants) { switcherState = 1; } else { switcherState += 1; }
+            //SwitchMomentally (Might be bad for the performance if includes alotof objects)
             foreach(PiledObjects piled in SwitcherButtonPiles) {
-                for (int i = 0; i < piled.Positive.Length; i++) {
-                    piled.Positive[i].SetActive(false);
-                }
-                for (int i = 0; i < piled.Negative.Length; i++) {
-                    piled.Negative[i].SetActive(true);
-                }
-                
+                for (int i = 0; i < piled.Positive.Length; i++) { piled.Positive[i].SetActive(false); }
+                for (int i = 0; i < piled.Negative.Length; i++) { piled.Negative[i].SetActive(true); }
             }
-            foreach(GameObject obj in SwitcherButtonPiles[switcherState-1].Positive) {
-                obj.SetActive(true);
-            }
-            foreach(GameObject obj in SwitcherButtonPiles[switcherState-1].Negative) {
-                obj.SetActive(false);
-            }
+            foreach(GameObject GutObj in SwitcherButtonPiles[switcherState-1].Positive) { GutObj.SetActive(true); }
+            foreach(GameObject BadObj in SwitcherButtonPiles[switcherState-1].Negative) { BadObj.SetActive(false); }
         }
     }
     IEnumerator LoadSceneAsync(string Name) {
@@ -117,109 +136,63 @@ public class XDButtonBehaviour : MonoBehaviour {
         }
     }
 }
+#endregion
+#region CustomEditor
 //###   WARNING   ###
-//###  GOVNOCODE! ###
+//###     WIP!    ###
 //###             ###
+#if UNITY_EDITOR
 [CustomEditor(typeof(XDButtonBehaviour))]
 public class XDButtonBehaviour_Editor : Editor {
     public override void OnInspectorGUI() {
+        DrawText("XDproject's UI Editor"); DrawText("SniffersInc. Technology");
+        //Root
+        DrawText("-=~=-");
         XDButtonBehaviour Elem = (XDButtonBehaviour)target;
-
         Elem.type = (UI_types)EditorGUILayout.EnumPopup("Type", Elem.type);
         Elem.targetMode = (UI_target_types)EditorGUILayout.EnumPopup("Target Type", Elem.targetMode);
-
+        //Strats
+        DrawText("-=~=-");
         switch (Elem.type) {
-            case UI_types.button:
-                EditorGUILayout.LabelField("-=~=-");
-                Elem.flipFlopStrat = EditorGUILayout.Toggle("Toggle Strat", Elem.flipFlopStrat);
-                break;
+            case UI_types.button: break;
             case UI_types.switchButton:
-                EditorGUILayout.LabelField("-=~=-");
                 Elem.switcherVariants = EditorGUILayout.IntField("Max Switcher Variants", Elem.switcherVariants);
                 Elem.switcherDisplayNegatives = EditorGUILayout.Toggle("Display Negatives", Elem.switcherDisplayNegatives);
                 break;
             default:
-                EditorGUILayout.LabelField("-=~=-");
                 EditorGUILayout.LabelField("No Editor Setting for type");
                 break;
         }
-        EditorGUILayout.LabelField("-=~=-");
+        //Targets
+        DrawText("-=~=-");
         switch (Elem.targetMode) {
             case UI_target_types.gameObjectsActivity:
+                //SinglePile
                 if (Elem.type == UI_types.button) {
-                    int posNewSize = EditorGUILayout.IntField("Positive Objects Size", Elem.DefaultButtonPile.Positive.Length, GUILayout.Height(20));
-                    if (posNewSize != Elem.DefaultButtonPile.Positive.Length) {
-                        System.Array.Resize(ref Elem.DefaultButtonPile.Positive, posNewSize);
-                    }
-                    for (int i = 0; i < Elem.DefaultButtonPile.Positive.Length; i++) {
-                        Elem.DefaultButtonPile.Positive[i] = (GameObject)EditorGUILayout.ObjectField(
-                            $"Element {i}", 
-                            Elem.DefaultButtonPile.Positive[i], 
-                            typeof(GameObject), 
-                            true,
-                            GUILayout.Height(15)
-                        );
-                    }
-                    int negNewSize = EditorGUILayout.IntField("Negative Objects Size", Elem.DefaultButtonPile.Negative.Length, GUILayout.Height(20));
-                    if (negNewSize != Elem.DefaultButtonPile.Negative.Length) {
-                        System.Array.Resize(ref Elem.DefaultButtonPile.Negative, negNewSize);
-                    }
-                    for (int i = 0; i < Elem.DefaultButtonPile.Negative.Length; i++) {
-                        Elem.DefaultButtonPile.Negative[i] = (GameObject)EditorGUILayout.ObjectField(
-                            $"Element {i}", 
-                            Elem.DefaultButtonPile.Negative[i], 
-                            typeof(GameObject), 
-                            true,
-                            GUILayout.Height(15)
-                        );
-                    }
-                } else if (Elem.type == UI_types.switchButton) {
+                    ResizeObjectArray(ref Elem.DefaultButtonPile.Positive, "  Positive");
+                    EditObjectArray(Elem.DefaultButtonPile.Positive, "    +");
+                    ResizeObjectArray(ref Elem.DefaultButtonPile.Negative, "  Negative");
+                    EditObjectArray(Elem.DefaultButtonPile.Negative, "    -");
+                } 
+                //Multy-pile
+                else if (Elem.type == UI_types.switchButton) {
                     System.Array.Resize(ref Elem.SwitcherButtonPiles, Elem.switcherVariants);
-                    foreach(PiledObjects piled in Elem.SwitcherButtonPiles) {
-                        EditorGUILayout.LabelField("Toggles");
-                        EditorGUILayout.LabelField("=-=-=");
-                        EditorGUILayout.LabelField("Positive");
-
-                        int posNewSize = EditorGUILayout.IntField("  Positive Objects Size", piled.Positive.Length, GUILayout.Height(20));
-                        if (posNewSize != piled.Positive.Length) {
-                            System.Array.Resize(ref piled.Positive, posNewSize);
-                        }
-
-                        for (int i = 0; i < piled.Positive.Length; i++) {
-                            piled.Positive[i] = (GameObject)EditorGUILayout.ObjectField(
-                                $"    Element {i}", 
-                                piled.Positive[i], 
-                                typeof(GameObject), 
-                                true,
-                                GUILayout.Height(15)
-                            );
-                        }
+                    DrawText("Toggles");
+                    foreach(var pile in Elem.SwitcherButtonPiles) {
+                        DrawText("  [#=#=#]");
+                        ResizeObjectArray(ref pile.Positive, "  Positives");
+                        EditObjectArray(pile.Positive, "    +");
                         if (Elem.switcherDisplayNegatives) {
-                            EditorGUILayout.LabelField("-=-");
-                            EditorGUILayout.LabelField("Negative");
-
-                            int negNewSize = EditorGUILayout.IntField("  Negative Objects Size", piled.Negative.Length, GUILayout.Height(20));
-                            if (negNewSize != piled.Negative.Length) {
-                                System.Array.Resize(ref piled.Negative, negNewSize);
-                            }
-                            for (int i = 0; i < piled.Negative.Length; i++) {
-                                piled.Negative[i] = (GameObject)EditorGUILayout.ObjectField(
-                                    $"    Element {i}", 
-                                    piled.Negative[i], 
-                                    typeof(GameObject), 
-                                    true,
-                                    GUILayout.Height(15)
-                                );
-                            }
+                            DrawText("    -=-=-");
+                            ResizeObjectArray(ref pile.Negative, "  Negatives");
+                            EditObjectArray(pile.Negative, "    -");
                         }
                     }
                 }
                 break;
             case UI_target_types.RandomPicker :
-                int pullsNewSize = EditorGUILayout.IntField("Pull Entries Count", Elem.RandomPickerEntries.Length, GUILayout.Height(20));
-                if (pullsNewSize != Elem.RandomPickerEntries.Length) {
-                    System.Array.Resize(ref Elem.RandomPickerEntries, pullsNewSize);
-                }
+                ResizeRandomPullArray(ref Elem.RandomPickerEntries, "  Pull Entries");
+                EditRandomPullArray(Elem.RandomPickerEntries, "    {");
                 for (int i = 0; i < Elem.RandomPickerEntries.Length; i++) {
                     EditorGUILayout.LabelField("   [#=#]");
                     //Animators
@@ -252,10 +225,54 @@ public class XDButtonBehaviour_Editor : Editor {
             case UI_target_types.LoadScene :
                 Elem.ActionName = EditorGUILayout.TextField("Scene Name", Elem.ActionName);
                 break;
+            case UI_target_types.StoreIntData :
+                int PPfsintPaths = EditorGUILayout.IntField("Paths Length", Elem.Strings.Length, GUILayout.Height(20));
+                if (PPfsintPaths != Elem.Strings.Length) {
+                    System.Array.Resize(ref Elem.Strings, PPfsintPaths);
+                }
+                for (int i = 0; i < Elem.Strings.Length; i++) {
+                    EditorGUILayout.LabelField("   [#=#]");
+                    Elem.Strings[i] = EditorGUILayout.TextField(
+                        $"   Path {i}", 
+                        Elem.Strings[i], 
+                        GUILayout.Height(15)
+                    );
+                }
+                break;
+            default :
+            EditorGUILayout.LabelField("No Editor Starts for this Target-type");
+                break;
         }
-
         if (GUI.changed) {
             EditorUtility.SetDirty(Elem);
         }
     }
+    void DrawText(string text) {
+        EditorGUILayout.LabelField(text);
+    }
+    void ResizeObjectArray(ref GameObject[] array, string label) {
+        int newSize = EditorGUILayout.IntField($"{label} Size", array.Length, GUILayout.Height(20));
+        if (newSize != array.Length) System.Array.Resize(ref array, newSize);
+    }
+    void EditObjectArray(GameObject[] array, string label) {
+        for (int i = 0; i < array.Length; i++) {
+            array[i] = (GameObject)EditorGUILayout.ObjectField($"{label} Element {i}", array[i], typeof(GameObject), true, GUILayout.Height(15));
+        }
+    }
+    void ResizeRandomPullArray(ref RandomPullEntry[] array, string label) {
+        int newSize = EditorGUILayout.IntField($"{label} Size", array.Length, GUILayout.Height(20));
+        if (newSize != array.Length) System.Array.Resize(ref array, newSize);
+    }
+    void EditRandomPullArray(RandomPullEntry[] array, string label) {
+        for (int i = 0; i < array.Length; i++) {
+            array[i].TargetAnimator = (Animator)EditorGUILayout.ObjectField(
+                $"{label} Element {i}", array[i].TargetAnimator, typeof(Animator), true, GUILayout.Height(15)
+            );
+            array[i].Clip = (AudioClip)EditorGUILayout.ObjectField(
+                $"{label} Element {i}", array[i].Clip, typeof(AudioClip), true, GUILayout.Height(15)
+            );
+        }
+    }
 }
+#endif
+#endregion

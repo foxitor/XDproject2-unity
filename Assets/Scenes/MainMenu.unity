@@ -194,7 +194,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "XD-Project II :\nV1.0\n\n=-=-=-=\n\n=-=-=-=\n\n=-=-=-=\n\n   #--#\n\n=-=-=-=\n\n=-=-=-=\n"
+  m_Text: "XD-Project II :\nV1.0\n\n=-=-=-=\n\n=-=-=-=\n\n=-=-=-=\n\n   #=#\n\n=-=-=-=\n\n=-=-=-=\n"
 --- !u!222 &1354717
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -589,6 +589,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 710689669}
   ActionName: Hide
+  Strings: []
 --- !u!1 &80664998
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,7 +921,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0410\u0447\u0438\u0432\u043C\u0435\u043D\u0442\u044B..."
+  m_Text: " \u0410\u0447\u0438\u0432\u043C\u0435\u043D\u0442\u044B..."
 --- !u!222 &107357314
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -953,6 +954,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 126594420}
   ActionName: Show
+  Strings: []
 --- !u!1 &115920880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,6 +1632,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 0}
   ActionName: GeometryTulevo
+  Strings: []
 --- !u!1 &370734382
 GameObject:
   m_ObjectHideFlags: 0
@@ -2072,6 +2075,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 126594420}
   ActionName: Hide
+  Strings: []
 --- !u!1 &492561827
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,6 +2883,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 710689669}
   ActionName: Show
+  Strings: []
 --- !u!82 &788794022
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3297,6 +3302,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1035887766}
+  - component: {fileID: 1035887770}
   - component: {fileID: 1035887769}
   - component: {fileID: 1035887768}
   - component: {fileID: 1035887767}
@@ -3428,6 +3434,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1035887765}
   m_CullTransparentMesh: 1
+--- !u!114 &1035887770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035887765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965b335aba207984fbbdcf89e5ce7213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  targetMode: 0
+  flipFlopStrat: 0
+  switcherVariants: 1
+  switcherDisplayNegatives: 0
+  DefaultButtonPile:
+    Positive: []
+    Negative: []
+  SwitcherButtonPiles:
+  - Positive: []
+    Negative: []
+  RandomPickerEntries: []
+  SingleAnimator: {fileID: 0}
+  ActionName: 
+  Strings: []
 --- !u!1 &1049935830
 GameObject:
   m_ObjectHideFlags: 0
@@ -3575,16 +3608,17 @@ MonoBehaviour:
     Negative: []
   SwitcherButtonPiles: []
   RandomPickerEntries:
-  - TargetAnimator: {fileID: 1965234601}
-    Clip: {fileID: 8300000, guid: 298756cc4d876de448ef336d32fb41a8, type: 3}
-  - TargetAnimator: {fileID: 1965234601}
-    Clip: {fileID: 8300000, guid: 8fe8eb201455322448d95a5983b8626c, type: 3}
-  - TargetAnimator: {fileID: 1965234601}
-    Clip: {fileID: 8300000, guid: 8893b5199eb086d4bb842f1c63911982, type: 3}
-  - TargetAnimator: {fileID: 1965234601}
-    Clip: {fileID: 8300000, guid: 758de7f66bec9074e9f468146e886cf4, type: 3}
+  - TargetAnimator: {fileID: 0}
+    Clip: {fileID: 0}
+  - TargetAnimator: {fileID: 0}
+    Clip: {fileID: 0}
+  - TargetAnimator: {fileID: 0}
+    Clip: {fileID: 0}
+  - TargetAnimator: {fileID: 0}
+    Clip: {fileID: 0}
   SingleAnimator: {fileID: 0}
   ActionName: 
+  Strings: []
 --- !u!1 &1078681523
 GameObject:
   m_ObjectHideFlags: 0
@@ -3948,6 +3982,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1272469960}
+  - component: {fileID: 1272469964}
   - component: {fileID: 1272469963}
   - component: {fileID: 1272469962}
   - component: {fileID: 1272469961}
@@ -4063,6 +4098,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1272469959}
   m_CullTransparentMesh: 1
+--- !u!114 &1272469964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272469959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965b335aba207984fbbdcf89e5ce7213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  targetMode: 3
+  flipFlopStrat: 0
+  switcherVariants: 0
+  switcherDisplayNegatives: 0
+  DefaultButtonPile:
+    Positive: []
+    Negative: []
+  SwitcherButtonPiles: []
+  RandomPickerEntries: []
+  SingleAnimator: {fileID: 0}
+  ActionName: ForceQuit
+  Strings: []
 --- !u!1 &1273616984
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,7 +4317,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041C\u0435\u0434\u0430\u043B\u0441\u044B..."
+  m_Text: " \u041C\u0435\u0434\u0430\u043B\u0441\u044B..."
 --- !u!222 &1287457813
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5148,6 +5208,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 1625470315}
   ActionName: Hide
+  Strings: []
 --- !u!82 &1783449506
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5584,6 +5645,7 @@ MonoBehaviour:
   RandomPickerEntries: []
   SingleAnimator: {fileID: 1625470315}
   ActionName: Show
+  Strings: []
 --- !u!82 &1887339605
 AudioSource:
   m_ObjectHideFlags: 0
