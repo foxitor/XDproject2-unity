@@ -1,6 +1,6 @@
 #region Import Libs
 using System.Collections;
-using UnityEngine; using UnityEngine.UI; using UnityEditor; using UnityEngine.SceneManagement;
+using UnityEngine; using UnityEngine.UI; using UnityEditor; using UnityEngine.SceneManagement; using UnityEngine.Audio;
 using XD.UI; using XD.Prefs;
 #endregion
 #region CustomLibrary
@@ -53,7 +53,9 @@ public class XDButtonBehaviour : MonoBehaviour {
     public RandomPullEntry[] RandomPickerEntries;
     public Animator SingleAnimator;
     public string ActionName;
-    public string[] Strings;
+    public string[] Strings = new string[0];
+    public AudioMixer Mixer;
+    public bool InteractWithMixer;
 
     //ClassificationVars
     Button myButton;
@@ -71,6 +73,8 @@ public class XDButtonBehaviour : MonoBehaviour {
                     case UI_types.switchButton : myButton = gameObject.GetComponent<Button>(); break;
             //Assign Dropdown
             case UI_types.dropdown : myDropdown = gameObject.GetComponent<Dropdown>(); break;
+            //Assign Slider
+            case UI_types.slider : mySlider = gameObject.GetComponent<Slider>(); break;
             //Assign Error
             default:
                 Debug.Log(type + " Doesn't Work within awake assign");
@@ -85,8 +89,10 @@ public class XDButtonBehaviour : MonoBehaviour {
         if (myButton != null) { myButton.onClick.AddListener(() => {ButtonPressed();}); }
         //Dropdown
         if (myDropdown != null) { myDropdown.onValueChanged.AddListener(delegate {DropdownChanged();}); }
+        //Slider
+        if (mySlider != null) { mySlider.onValueChanged.AddListener(delegate {SliderValueTweaked();}); }
         //Audio
-        if (targetMode == UI_target_types.RandomPicker) { myAudio = gameObject.AddComponent<AudioSource>(); }
+        if (targetMode == UI_target_types.RandomPicker) { myAudio = gameObject.GetComponent<AudioSource>(); }
 
         RestoreDatas();
     }
@@ -147,6 +153,26 @@ public class XDButtonBehaviour : MonoBehaviour {
             }
         }
     }
+    public void SliderValueTweaked() {
+        if (mySlider == null) return;
+        //StoreFloat
+        if (targetMode == UI_target_types.StoreFloatData) {
+            foreach (string ppf in Strings) {
+                AdvancedPPfs.Core.ProtectedStore(ppf, mySlider.value);
+                //Debug.Log($"I as a computer programm now indeed store the data, that can be in fact be translated to {ppf}.\nyou may be asking yourself now, whats the value that the {ppf} obtained? so the answer is simple my friend, it is equal to {mySlider.value}");
+            }
+            if (InteractWithMixer) {
+                switch (Strings[0]) {
+                    case "music_volume" :
+                        Mixer.SetFloat("MusicVolume", Mathf.Log10(mySlider.value)*20);
+                        break;
+                    case "sfx_volume" :
+                        Mixer.SetFloat("SfxVolume", Mathf.Log10(mySlider.value)*20);
+                        break;
+                }
+            }
+        }
+    }
     void RestoreDatas() {
         //Debug.Log($"RestoreData Was Runned by {gameObject.name}");
         //Restore Drops
@@ -158,6 +184,17 @@ public class XDButtonBehaviour : MonoBehaviour {
                 } 
             else { foreach (string ppf in Strings) { 
                 AdvancedPPfs.Core.ProtectedStore(ppf, myDropdown.value); 
+                } Debug.Log($"RestoreData Was Finished, result : found the protective data");
+            }
+        }
+        if (mySlider != null) {
+            //RestoreSeasons
+            if (PlayerPrefs.HasKey(Strings[0])) { 
+                mySlider.value = PlayerPrefs.GetFloat(Strings[0]); 
+                //Debug.Log($"RestoreData Was Finished, result : found the ppf");
+                } 
+            else { foreach (string ppf in Strings) { 
+                AdvancedPPfs.Core.ProtectedStore(ppf, mySlider.value); 
                 } Debug.Log($"RestoreData Was Finished, result : found the protective data");
             }
         }
@@ -239,11 +276,20 @@ public class XDButtonBehaviour_Editor : Editor {
             case UI_target_types.LoadScene :
                 Elem.ActionName = EditorGUILayout.TextField("Scene Name", Elem.ActionName);
                 break;
-            //StoreInt
+            //Store
+            case UI_target_types.StoreFloatData:
+                Elem.Mixer = (AudioMixer)EditorGUILayout.ObjectField($" Target Mixer", Elem.Mixer, typeof(AudioMixer), true);
+                if (Elem.type == UI_types.slider) {
+                    Elem.InteractWithMixer = EditorGUILayout.Toggle("Apply to AudioMixer", Elem.InteractWithMixer);
+                }
+                ResizeStringArray(ref Elem.Strings, "   Paths");
+                EditStringArray(Elem.Strings, "   Path");
+                break;
             case UI_target_types.StoreIntData :
                 ResizeStringArray(ref Elem.Strings, "   Paths");
                 EditStringArray(Elem.Strings, "   Path");
                 break;
+                
             //Null
             default :
             DrawText("No Editor Starts for this Target-type");

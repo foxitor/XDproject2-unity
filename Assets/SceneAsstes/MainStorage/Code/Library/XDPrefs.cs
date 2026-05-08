@@ -17,6 +17,11 @@ namespace XD.Prefs {
             Protect(key, value);
             Debug.Log($"Resived Protected-Store Input(int), including : {key} = {value}");
         }
+        public void ProtectedStore(string key, float value) {
+            PlayerPrefs.SetFloat(key, value);
+            Protect(key, value);
+            Debug.Log($"Resived Protected-Store Input(float), including : {key} = {value}");
+        }
         void Protect(string key, int value) {
             if (FindProtectiveInt(key) != -1) {
                 ProtectedIntMemory burn = BurnIntMemory[FindProtectiveInt(key)];
@@ -35,9 +40,27 @@ namespace XD.Prefs {
 
                 BurnIntMemory = temp;
             }
-            foreach(ProtectedIntMemory prot in BurnIntMemory) {
-                //Debug.Log($"{prot.key} = {prot.value}");
+            //foreach(ProtectedIntMemory prot in BurnIntMemory) { "Debug.Log($"{prot.key} = {prot.value}"); }
+        }
+        void Protect(string key, float value) {
+            if (FindProtectiveInt(key) != -1) {
+                ProtectedFloatMemory burn = BurnFloatMemory[FindProtectiveFloat(key)];
+                if (burn != null) {
+                    burn.key = key;
+                    burn.value = value;
+                }
+            } else { 
+                var product = new ProtectedFloatMemory();
+                product.key = key;
+                product.value = value;
+                //Extend the array that way...
+                ProtectedFloatMemory[] temp = new ProtectedFloatMemory[BurnFloatMemory.Length + 1];
+                System.Array.Copy(BurnFloatMemory, temp, BurnFloatMemory.Length);
+                temp[temp.Length - 1] = product;
+
+                BurnFloatMemory = temp;
             }
+            //foreach(ProtectedFloatMemory prot in BurnIntMemory) { "Debug.Log($"{prot.key} = {prot.value}"); }
         }
         int FindProtectiveInt(string key) {
             for (int i = 0; i < BurnIntMemory.Length; i++) {
@@ -47,10 +70,26 @@ namespace XD.Prefs {
             } 
             return -1;
         }
-        int ShareProtectedValue(string key) {
+        int FindProtectiveFloat(string key) {
+            for (int i = 0; i < BurnFloatMemory.Length; i++) {
+                if (BurnFloatMemory[i].key == key) {
+                    return i;
+                }
+            } 
+            return -1;
+        }
+        int ShareProtectedIntValue(string key) {
             for (int i = 0; i < BurnIntMemory.Length; i++) {
                 if (BurnIntMemory[i].key == key) {
                     return BurnIntMemory[i].value;
+                }
+            } 
+            return -1;
+        }
+        float ShareProtectedFloatValue(string key) {
+            for (int i = 0; i < BurnFloatMemory.Length; i++) {
+                if (BurnFloatMemory[i].key == key) {
+                    return BurnFloatMemory[i].value;
                 }
             } 
             return -1;
