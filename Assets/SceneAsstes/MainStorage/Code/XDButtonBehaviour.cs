@@ -3,35 +3,6 @@ using System.Collections;
 using UnityEngine; using UnityEngine.UI; using UnityEditor; using UnityEngine.SceneManagement; using UnityEngine.Audio;
 using XD.UI; using XD.Prefs;
 #endregion
-#region CustomLibrary
-namespace XD.UI {
-    public enum UI_types {
-        button,
-        toggleButton,
-        switchButton,
-        slider,
-        dropdown
-    }
-    public enum UI_target_types {
-        gameObjectsActivity,
-        RandomPicker,
-        TriggerAnimation,
-        LoadScene,
-        StoreIntData,
-        StoreFloatData
-    }
-    [System.Serializable]
-    public class PiledObjects {
-        public GameObject[] Positive = new GameObject[0];
-        public GameObject[] Negative = new GameObject[0];
-    }
-    [System.Serializable]
-    public class RandomPullEntry {
-        public Animator TargetAnimator;
-        public AudioClip Clip;
-    }
-}
-#endregion
 #region Class
 public class XDButtonBehaviour : MonoBehaviour {
     //General 
@@ -184,7 +155,7 @@ public class XDButtonBehaviour : MonoBehaviour {
                 } 
             else { foreach (string ppf in Strings) { 
                 AdvancedPPfs.Core.ProtectedStore(ppf, myDropdown.value); 
-                } Debug.Log($"RestoreData Was Finished, result : found the protective data");
+                } //Debug.Log($"RestoreData Was Finished, result : found the protective data");
             }
         }
         if (mySlider != null) {
@@ -195,7 +166,7 @@ public class XDButtonBehaviour : MonoBehaviour {
                 } 
             else { foreach (string ppf in Strings) { 
                 AdvancedPPfs.Core.ProtectedStore(ppf, mySlider.value); 
-                } Debug.Log($"RestoreData Was Finished, result : found the protective data");
+                } //Debug.Log($"RestoreData Was Finished, result : found the protective data");
             }
         }
     }

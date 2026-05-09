@@ -15,12 +15,12 @@ namespace XD.Prefs {
         public void ProtectedStore(string key, int value) {
             PlayerPrefs.SetInt(key, value);
             Protect(key, value);
-            Debug.Log($"Resived Protected-Store Input(int), including : {key} = {value}");
+            //Debug.Log($"Resived Protected-Store Input(int), including : {key} = {value}");
         }
         public void ProtectedStore(string key, float value) {
             PlayerPrefs.SetFloat(key, value);
             Protect(key, value);
-            Debug.Log($"Resived Protected-Store Input(float), including : {key} = {value}");
+            //Debug.Log($"Resived Protected-Store Input(float), including : {key} = {value}");
         }
         void Protect(string key, int value) {
             if (FindProtectiveInt(key) != -1) {
@@ -96,10 +96,10 @@ namespace XD.Prefs {
         }
         public void Erase() {
             PlayerPrefs.DeleteAll();
-            Debug.Log($"Attention! Delete protocol is alredy started work,");
+            //Debug.Log($"Attention! Delete protocol is alredy started work,");
             OnDataReset?.Invoke();
-            Debug.Log($"currently contacting the subscribers.");
-            Debug.Log($"Data must be in place. if some data was completly erased, RIP to theese...");
+            //Debug.Log($"currently contacting the subscribers.");
+            //Debug.Log($"Data must be in place. if some data was completly erased, RIP to theese...");
         }
     }
     [System.Serializable]
