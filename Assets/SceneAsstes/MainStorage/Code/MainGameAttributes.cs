@@ -25,6 +25,18 @@ public class MainGameAttributes : MonoBehaviour {
     [Header("Ranks")]
     public RankVideo[] VideoClips;
 
+    public static event System.Action OnGameStart;
+
+    public static event System.Action OnLowGraphDraw;
+    public static event System.Action OnMediumGraphDraw;
+    public static event System.Action OnHighGraphDraw;
+
+    void Start() {
+        AssignDifficulty(1);
+        preGameSetup.SetActive(true);
+        GameplaySetup.SetActive(false);
+        RankingSetup.SetActive(false);
+    }
     //preGame
     public void AssignDifficulty(int value) {
         switch (value) {
@@ -38,17 +50,41 @@ public class MainGameAttributes : MonoBehaviour {
         WearableValue = value;
     }
     public void RunGame() {
+        OnGameStart?.Invoke();
         State = GameStates.game;
         TranslateDifficulty();
-    }
+        preGameSetup.SetActive(false);
+        GameplaySetup.SetActive(true);
 
-    //Update
+        OnDetailDraw(DetalizationLevels.low);
+        OnDetailDraw(DetalizationLevels.medium);
+        OnDetailDraw(DetalizationLevels.high);
+    }
+    //Game
     void Update() {
         if (State == GameStates.preGame) return;
         if (State == GameStates.endGame) return;
         UpdateSituation();
     }
-    //ReadableDifficulty
+    void OnDetailDraw(DetalizationLevels level) {
+        switch (level) {
+            case DetalizationLevels.low : 
+                if (PlayerPrefs.HasKey("DetailLevel") && PlayerPrefs.GetInt("DetailLevel") >= 0) { 
+                    OnLowGraphDraw?.Invoke(); 
+                } 
+                break;
+            case DetalizationLevels.medium : 
+                if (PlayerPrefs.HasKey("DetailLevel") && PlayerPrefs.GetInt("DetailLevel") >= 1) { 
+                    OnMediumGraphDraw?.Invoke(); 
+                } 
+                break;
+            case DetalizationLevels.high : 
+                if (PlayerPrefs.HasKey("DetailLevel") && PlayerPrefs.GetInt("DetailLevel") >= 2) { 
+                    OnHighGraphDraw?.Invoke(); 
+                } 
+                break;
+        }
+    }
     public virtual void TranslateDifficulty() {
         string product = "";
         switch (Difficulty) {
@@ -60,7 +96,6 @@ public class MainGameAttributes : MonoBehaviour {
         }
         TranslatedDifficulty = product;
     }
-    //DisplaysTopText
     public virtual void UpdateSituation() {
         SituationDisplay.text = $"MainGameAttribute is runs the process. difficulty : {TranslatedDifficulty}";
     }

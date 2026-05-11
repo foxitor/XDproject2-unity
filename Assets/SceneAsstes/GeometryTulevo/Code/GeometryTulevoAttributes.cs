@@ -22,7 +22,7 @@ public class GeometryTulevoAttributes : MainGameAttributes {
         TranslatedDifficulty = product;
     }
     public override void UpdateSituation() {
-        SituationDisplay.text = $"Патронов найдено : {collectedBullets} / {bulletGoal};\n Слоёв обысканно : {layersSearched}";
+        SituationDisplay.text = $"Патронов найдено : {collectedBullets} / {bulletGoal}; Тяжкость : {TranslatedDifficulty}\nСлоёв обысканно : {layersSearched}";
     }
 }
 #endregion

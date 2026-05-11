@@ -38,9 +38,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Back
+    uniqueID: 81389951
+    locked: 0
+  - name: Far
+    uniqueID: 1264383657
+    locked: 0
+  - name: Distant
+    uniqueID: 3078351361
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: UI
+  - name: Close
+    uniqueID: 3668750287
+    locked: 0
+  - name: Closer
     uniqueID: 1718440549
+    locked: 0
+  - name: Hiest
+    uniqueID: 3690761249
     locked: 0

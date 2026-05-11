@@ -16,6 +16,11 @@ namespace XD.Games {
         unlocked,
         selected
     }
+    public enum DetalizationLevels {
+        low,
+        medium,
+        high
+    }
     [System.Serializable]
     public class RankVideo {
         public string NameKey;
