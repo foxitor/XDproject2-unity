@@ -55,6 +55,7 @@ public class MainGameAttributes : MonoBehaviour {
         TranslateDifficulty();
         preGameSetup.SetActive(false);
         GameplaySetup.SetActive(true);
+        gameObject.GetComponent<Camera>().enabled = false;
 
         OnDetailDraw(DetalizationLevels.low);
         OnDetailDraw(DetalizationLevels.medium);
@@ -98,6 +99,13 @@ public class MainGameAttributes : MonoBehaviour {
     }
     public virtual void UpdateSituation() {
         SituationDisplay.text = $"MainGameAttribute is runs the process. difficulty : {TranslatedDifficulty}";
+    }
+    public void ReloadOrExit() {
+        if (State == GameStates.preGame) {
+            SceneManager.LoadScene("MainMenu");
+        } else {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
 #endregion

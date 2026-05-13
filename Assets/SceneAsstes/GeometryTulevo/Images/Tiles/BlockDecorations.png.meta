@@ -180,6 +180,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: BlockDecorations_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 872
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e6366d58a4bace43b879ef00e38759e
+      internalID: -2006103873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlockDecorations_2
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 872
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3e3a74db06253144b34f6bf1f768878
+      internalID: 1303365672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlockDecorations_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 872
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7453a223eefa174392939d653853213
+      internalID: -430021373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlockDecorations_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 744
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a96554335c764434bb7e4f913ac6d4cc
+      internalID: 1187390835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -192,6 +276,10 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       BlockDecorations_0: 1783145120
+      BlockDecorations_1: -2006103873
+      BlockDecorations_2: 1303365672
+      BlockDecorations_3: -430021373
+      BlockDecorations_4: 1187390835
       BrickDecal: 1459406132
       RustierBlock: 732525430
       RustyBlock: 136378928

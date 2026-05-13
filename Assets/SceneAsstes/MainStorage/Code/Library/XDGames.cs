@@ -26,4 +26,13 @@ namespace XD.Games {
         public string NameKey;
         public VideoClip Clip;
     }
+    #region localGameData
+    //GT
+    public enum GTObjTypes {
+        spike, saw,
+        orb, gravityOrb,
+        teleportPortal, reversePortal, gravityPortal,
+        interactive, item
+    }
+    #endregion
 }
