@@ -19,7 +19,7 @@ public class GeometryTulevoTaggedObject : MainTaggedObject {
         }
     } 
     public void OpenBox() {
-        transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(false);
         SpawnLoot();
     }
     public void RestoreBox() {
@@ -29,7 +29,9 @@ public class GeometryTulevoTaggedObject : MainTaggedObject {
         }
     }
     public void SpawnLoot() {
-        if (Random.Range(0, lootChance) == lootChance) {
+        if (Random.Range(0, lootChance) == lootChance-1) {
+            Vector3 defPos = transform.position;
+            Vector3 spawnPos = new Vector3(defPos.x + Random.Range(-0.25f, 0.25f), defPos.y + Random.Range(-0.25f, 0.25f), defPos.z);
             Instantiate(posibleLoots[Random.Range(0, posibleLoots.Length)], transform.position, Quaternion.identity, transform);
         }
     }

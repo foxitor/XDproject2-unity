@@ -1,5 +1,5 @@
 using System.Collections;
-using UnityEngine;
+using UnityEngine; using UnityEngine.InputSystem;
 using XD.Games;
 
 public class GTShigimaController : MonoBehaviour {
@@ -12,7 +12,7 @@ public class GTShigimaController : MonoBehaviour {
 
     float currentSpeed, defaultSpeed = 5.2f, superSpeed = 12.96f, jumpForce = 10f, airRotationSpeed = -225f; 
     float groundTestRadius = 0.05f, dashRestore;
-    bool speedBoosted, onGround, frontObsticale;
+    bool dashAbility, onGround, frontObsticale;
     bool gravity, direction;
 
     Color[] powerColors = new Color[] {
@@ -32,6 +32,14 @@ public class GTShigimaController : MonoBehaviour {
     GameObject curBox;
     bool deathPulsed;
 
+    //Controlls
+    GlobalControlls Controls; Gamepad gamepad;
+    void Awake() { 
+        Controls = new GlobalControlls();
+    }
+    void OnEnable() { Controls.Joystick.Enable(); } 
+    void OnDisable() { Controls.Joystick.Disable(); }
+    
     void Start() {
         Attributes = GameObject.Find("Main Camera").GetComponent<GeometryTulevoAttributes>();
         mySource = gameObject.GetComponent<AudioSource>();
@@ -44,7 +52,7 @@ public class GTShigimaController : MonoBehaviour {
     void Update() {
         //ManageSpeed(); 
         ManageJumpos();
-        if (speedBoosted) { 
+        if (dashAbility) { 
             if (dashRestore > 0) {
                 dashRestore -= Time.deltaTime;
                 float t = 1 - (dashRestore / 2.5f);
@@ -92,24 +100,11 @@ public class GTShigimaController : MonoBehaviour {
     }
     void ManageJumpos() {
         if (canMove) {
-            if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))) {
-                if (!frontObsticale && curBox == null) {
-                    impulseJump(true);
-                    if (hasOrb) { //VibrateController(0.025f, 0.025f, 0.1f); 
-                        impulseJump(false); hasOrb = false; }
-                    if (hasGravityOrb) {
-                        //VibrateController(0.025f, 0.025f, 0.1f);
-                        Phy.velocity = Vector2.zero;
-                        gravity = !gravity; Phy.gravityScale = Phy.gravityScale * -1;
-                        hasGravityOrb = false;
-                    }
-                } else if (curBox != null) {
-            //        curBox.GetComponent<TulevoObjectModifier>().OpenBox();
-                    curBox = null;
-                }
+            if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0) || Controls.Joystick.A.ReadValue<float>() > 0)) {
+                JumpControllPressed();
             }
-            if (speedBoosted) {
-                if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.Z)) {
+            if (dashAbility) {
+                if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.Z) || Controls.Joystick.B.ReadValue<float>() > 0) {
                     if (dashRestore <= 0) {
                         StartCoroutine(Dash());
                     }
@@ -117,14 +112,34 @@ public class GTShigimaController : MonoBehaviour {
             }
         }
     }
-    public void impulseJump(bool checkGround = false) {
-        if (checkGround && onGround) {
+    void JumpControllPressed() {
+        if (canMove) {
+            if (!frontObsticale && curBox == null) {
+                impulseJump(true);
+                if (hasOrb) {
+                    impulseJump(false);
+                    hasOrb = false;
+                } if (hasGravityOrb) {
+                    Phy.velocity = Vector2.zero;
+                    gravity = !gravity;
+                    Phy.gravityScale = Phy.gravityScale * -1;
+                    hasGravityOrb = false;
+                }
+            }
+            else if (curBox != null) {
+                curBox.GetComponent<GeometryTulevoTaggedObject>().OpenBox();
+                curBox = null;
+            }
+        }
+    }
+    public void impulseJump(bool checkSituation = false) {
+        if (checkSituation && onGround) {
             Phy.velocity = Vector2.zero; Phy.AddForce(Vector2.up * (jumpForce) * (gravity ? -1 : 1), ForceMode2D.Impulse);
-        } else if (!checkGround) {
+        } else if (!checkSituation) {
             Phy.velocity = Vector2.zero; Phy.AddForce(Vector2.up * (jumpForce) * (gravity ? -1 : 1), ForceMode2D.Impulse);
         }
     }
-    //#interact
+    //interact
     void OnTriggerEnter2D(Collider2D collision) {
         GeometryTulevoTaggedObject Modifier = collision.gameObject.GetComponent<GeometryTulevoTaggedObject>();
         if (Modifier != null) {
@@ -133,6 +148,8 @@ public class GTShigimaController : MonoBehaviour {
                     transform.position = Modifier.teleportLink.position;
                     if (Modifier.layerChanger) { 
                         Attributes.layersSearched++; 
+                        Attributes.OnNewLayer();
+                        if (Attributes.layersSearched >= Attributes.dashGoal) { dashAbility = true; }
                         StartCoroutine(Messenge(0, 0.75f));
                     }
                 break;

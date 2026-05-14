@@ -1,7 +1,6 @@
 #region Import Libs
-using System.Collections;
-using UnityEngine; using UnityEngine.UI; using UnityEditor; using UnityEngine.SceneManagement;
-using XD.UI; using XD.Prefs; using XD.Games;
+using UnityEngine;
+using XD.Games;
 #endregion
 #region Class
 public class MainTaggedObject : MonoBehaviour {
@@ -10,7 +9,7 @@ public class MainTaggedObject : MonoBehaviour {
     bool isDrawn;
 
     void OnEnable() { 
-        attributes = Camera.main.gameObject.GetComponent<MainGameAttributes>();
+        attributes = GameObject.Find("Main Camera").gameObject.GetComponent<MainGameAttributes>();
     
         MainGameAttributes.OnLowGraphDraw += HandleLow;
         MainGameAttributes.OnMediumGraphDraw += HandleMedium;
