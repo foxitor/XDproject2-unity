@@ -42,6 +42,12 @@ public class GeometryTulevoAttributes : MainGameAttributes {
         SituationDisplay.text = $"Патронов найдено : {collectedBullets} / {bulletGoal}; Тяжкость : {TranslatedDifficulty}\nСлоёв обысканно : {layersSearched}";
     }
     public void OnNewLayer() {
+        //Deleting previous bullets
+        foreach (Transform spawn in spawns) {
+            if (spawn.childCount > 0) {
+                Destroy(spawn.GetChild(0).gameObject);
+            }
+        }
         //Spawning the bullets
         for (int i = 0; i < bulletsPerLayer; i++) {
             int pick = Random.Range(0, spawns.Length);

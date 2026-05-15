@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections; using System.Collections.Generic;
 using UnityEngine; using UnityEngine.InputSystem;
 using XD.Games;
 
@@ -29,7 +29,8 @@ public class GTShigimaController : MonoBehaviour {
     public AudioClip[] dashSounds;
 
     bool hasOrb, hasGravityOrb, hasBox;
-    GameObject curBox;
+    GameObject curBox; 
+    List<GameObject> boxMemory = new List<GameObject>();
     bool deathPulsed;
 
     //Controlls
@@ -41,6 +42,7 @@ public class GTShigimaController : MonoBehaviour {
     void OnDisable() { Controls.Joystick.Disable(); }
     
     void Start() {
+        gamepad = Gamepad.current;
         Attributes = GameObject.Find("Main Camera").GetComponent<GeometryTulevoAttributes>();
         mySource = gameObject.GetComponent<AudioSource>();
         visual = transform.GetChild(0).gameObject;
@@ -104,7 +106,7 @@ public class GTShigimaController : MonoBehaviour {
                 JumpControllPressed();
             }
             if (dashAbility) {
-                if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.Z) || Controls.Joystick.B.ReadValue<float>() > 0) {
+                if (Input.GetKey(KeyCode.Z) || Input.GetMouseButton(1) || Controls.Joystick.B.ReadValue<float>() > 0) {
                     if (dashRestore <= 0) {
                         StartCoroutine(Dash());
                     }
@@ -117,9 +119,13 @@ public class GTShigimaController : MonoBehaviour {
             if (!frontObsticale && curBox == null) {
                 impulseJump(true);
                 if (hasOrb) {
+                    mySource.PlayOneShot(orbHopSound);
                     impulseJump(false);
+                    VibrateController(0.1f, 0.1f, 0.1f);
                     hasOrb = false;
                 } if (hasGravityOrb) {
+                    mySource.PlayOneShot(orbHopSound);
+                    VibrateController(0.1f, 0.1f, 0.1f);
                     Phy.velocity = Vector2.zero;
                     gravity = !gravity;
                     Phy.gravityScale = Phy.gravityScale * -1;
@@ -128,6 +134,7 @@ public class GTShigimaController : MonoBehaviour {
             }
             else if (curBox != null) {
                 curBox.GetComponent<GeometryTulevoTaggedObject>().OpenBox();
+                boxMemory.Add(curBox);
                 curBox = null;
             }
         }
@@ -149,6 +156,10 @@ public class GTShigimaController : MonoBehaviour {
                     if (Modifier.layerChanger) { 
                         Attributes.layersSearched++; 
                         Attributes.OnNewLayer();
+                        foreach (GameObject box in boxMemory) {
+                            box.GetComponent<GeometryTulevoTaggedObject>().RestoreBox();
+                        }
+                        boxMemory.Clear();
                         if (Attributes.layersSearched >= Attributes.dashGoal) { dashAbility = true; }
                         StartCoroutine(Messenge(0, 0.75f));
                     }
@@ -213,13 +224,13 @@ public class GTShigimaController : MonoBehaviour {
         mySource.PlayOneShot(dashSounds[Random.Range(0, dashSounds.Length)]);
         currentSpeed = superSpeed;
         dashRestore = 2.5f;
-        //VibrateController(0.25f, 0.25f, 0.25f);
+        VibrateController(0.25f, 0.25f, 0.25f);
         yield return new WaitForSeconds(0.25f);
         currentSpeed = defaultSpeed;
     }
     IEnumerator Messenge(int order, float liveTime) {
         messengeGroup.transform.GetChild(order).gameObject.SetActive(true);
-        //Add Joystick vibration later
+        VibrateController(0.25f, 0.25f, 0.15f);
         yield return new WaitForSeconds(liveTime);
         messengeGroup.transform.GetChild(order).gameObject.SetActive(false);
     }
@@ -229,8 +240,20 @@ public class GTShigimaController : MonoBehaviour {
         canMove = false; 
         //Game.DeadMessange.SetActive(true);
         mySource.PlayOneShot(deathCall);
-        //VibrateController(0.2f, 0.2f, 0.5f);
-        yield return new WaitForSeconds(2.5f);
+        VibrateController(0f, 0.75f, 0.2f);
+        yield return new WaitForSeconds(0.2f);
+        VibrateController(0.75f, 0f, 0.2f);
+        yield return new WaitForSeconds(4f - 0.2f);
         Attributes.ReloadOrExit();
     } 
+    public void VibrateController(float leftMotor, float rightMotor, float duration) {
+        if (gamepad != null) { 
+            gamepad.SetMotorSpeeds(leftMotor, rightMotor); Invoke("StopVibration", duration); 
+        }
+    }
+    public void StopVibration() {
+        if (gamepad != null) { 
+            gamepad.SetMotorSpeeds(0, 0); 
+        }
+    }
 }

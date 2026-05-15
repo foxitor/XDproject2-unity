@@ -11,6 +11,7 @@ public class GeometryTulevoTaggedObject : MainTaggedObject {
     public bool layerChanger;
     public string objectSubtype;
     [Header("-loot-")]
+    bool isLooted;
     public int lootChance;
     public GameObject[] posibleLoots;
     void Update() {
@@ -19,17 +20,19 @@ public class GeometryTulevoTaggedObject : MainTaggedObject {
         }
     } 
     public void OpenBox() {
+        isLooted = true;
         transform.GetChild(0).gameObject.SetActive(false);
         SpawnLoot();
     }
     public void RestoreBox() {
-        transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        isLooted = false;
+        transform.GetChild(0).gameObject.SetActive(true);
         if (transform.childCount > 1) {
             Destroy(transform.GetChild(1).gameObject);
         }
     }
     public void SpawnLoot() {
-        if (Random.Range(0, lootChance) == lootChance-1) {
+        if (Random.Range(0, lootChance) == lootChance-1 && !isLooted) {
             Vector3 defPos = transform.position;
             Vector3 spawnPos = new Vector3(defPos.x + Random.Range(-0.25f, 0.25f), defPos.y + Random.Range(-0.25f, 0.25f), defPos.z);
             Instantiate(posibleLoots[Random.Range(0, posibleLoots.Length)], transform.position, Quaternion.identity, transform);

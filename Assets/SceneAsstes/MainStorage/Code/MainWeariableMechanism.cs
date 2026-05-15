@@ -16,8 +16,18 @@ public class MainWeariableMechanism : MonoBehaviour {
 
     public static event System.Action OnWearablePick;
 
-    void OnEnable() { OnWearablePick += Reset; MainGameAttributes.OnGameStart += UseOrDeny; }
-    void OnDisable() { OnWearablePick -= Reset; MainGameAttributes.OnGameStart -= UseOrDeny; }
+    void OnEnable() { 
+        OnWearablePick += Reset; 
+        MainGameAttributes.OnGameStart += UseOrDeny; 
+        MainGameAttributes.OnGamepadWearableScroll += OnGamepadScroll;
+        MainGameAttributes.SelectDefaultWearable += SelectDefault;
+    }
+    void OnDisable() { 
+        OnWearablePick -= Reset; 
+        MainGameAttributes.OnGameStart -= UseOrDeny;
+        MainGameAttributes.OnGamepadWearableScroll -= OnGamepadScroll;
+        MainGameAttributes.SelectDefaultWearable -= SelectDefault;
+    }
 
     void Start() {
         LastUsedPath = $"{savePath} Picked";
@@ -38,6 +48,7 @@ public class MainWeariableMechanism : MonoBehaviour {
                 if (customData == "default" && !PlayerPrefs.HasKey(savePath)) {
                     PlayerPrefs.SetInt(LastUsedPath, 1);
                     state = WearableStates.selected;
+                    attributes.WearableValue = order;
                 } else {
                     PlayerPrefs.SetInt(LastUsedPath, 0);
                 }
@@ -48,6 +59,7 @@ public class MainWeariableMechanism : MonoBehaviour {
                 if (PlayerPrefs.HasKey(LastUsedPath)) {
                     if (PlayerPrefs.GetInt(LastUsedPath) == 1) {
                         state = WearableStates.selected;
+                        attributes.WearableValue = order;
                     }
                 }
             } else {
@@ -71,8 +83,19 @@ public class MainWeariableMechanism : MonoBehaviour {
         if (state == WearableStates.locked || state == WearableStates.selected) { UpdateDisplay(); return; }
         OnWearablePick?.Invoke();
         state = WearableStates.selected;
+        attributes.WearableValue = order;
         PlayerPrefs.SetInt(LastUsedPath, 1);
         UpdateDisplay();
+    }
+    void OnGamepadScroll() {
+        if (order == (attributes.WearableValue + 1)) {
+            attributes.oneShotWearable = this;
+        }
+    }
+    public void SelectDefault() {
+        if (customData == "default") {
+            OnPress();
+        }
     }
     void UseOrDeny() {
         if (state == WearableStates.selected) {
