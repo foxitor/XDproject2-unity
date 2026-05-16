@@ -159,6 +159,153 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: WallPaintings_1
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 633
+        width: 227
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccf00108e9f349c43b19be6dcefceb18
+      internalID: 957953081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallPaintings_2
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 612
+        width: 236
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 040fd96cd4c22dd47bb58974ac81d605
+      internalID: -226592308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallPaintings_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 483
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cd5413ac2e250f41adbef6beed25312
+      internalID: -389911247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallPaintings_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 483
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 073c72c8e894a684f8525ef6461ac4ab
+      internalID: 1536766833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallPaintings_5
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 483
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d53e3a7f3344bce4e81791d7aeaa5d50
+      internalID: -1825376394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallPaintings_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 483
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46da41381405d504eaa0cdd1f4313865
+      internalID: -751165764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallPaintings_7
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 483
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34719ce85d6665a4ea8bc21b1131c9c3
+      internalID: 1768931269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -173,6 +320,13 @@ TextureImporter:
       BatyaWarning: -1239611032
       Paper: -1714669950
       WallPaintings_0: -1034053476
+      WallPaintings_1: 957953081
+      WallPaintings_2: -226592308
+      WallPaintings_3: -389911247
+      WallPaintings_4: 1536766833
+      WallPaintings_5: -1825376394
+      WallPaintings_6: -751165764
+      WallPaintings_7: 1768931269
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

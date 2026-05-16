@@ -16,6 +16,8 @@ public class GeometryTulevoAttributes : MainGameAttributes {
     public int bulletsPerLayer;
     public int dashGoal; 
 
+    public static event System.Action NewLayer;
+
     public override void TranslateDifficulty() {
         string product = "";
         switch (Difficulty) {
@@ -42,6 +44,7 @@ public class GeometryTulevoAttributes : MainGameAttributes {
         SituationDisplay.text = $"Патронов найдено : {collectedBullets} / {bulletGoal}; Тяжкость : {TranslatedDifficulty}\nСлоёв обысканно : {layersSearched}";
     }
     public void OnNewLayer() {
+        NewLayer?.Invoke();
         //Deleting previous bullets
         foreach (Transform spawn in spawns) {
             if (spawn.childCount > 0) {

@@ -1,6 +1,6 @@
 #region Import Libs
 using System.Collections;
-using UnityEngine; using UnityEngine.UI; using UnityEngine.SceneManagement; using UnityEngine.InputSystem;
+using UnityEngine; using UnityEngine.UI; using UnityEngine.SceneManagement; using UnityEngine.InputSystem; using UnityEngine.Video;
 using XD.UI; using XD.Prefs; using XD.Games;
 #endregion
 #region Class
@@ -16,6 +16,10 @@ public class MainGameAttributes : MonoBehaviour {
     [Space]
     public Text difficultyDisplayText;
     public string menuDifficultyPrefix;
+    [Space]
+    public VideoPlayer VideoScreen;
+    public Text RankingText;
+    public GameObject RankingScreenClosed;
     
     [Header("Display")]
     public Text SituationDisplay;
@@ -31,12 +35,14 @@ public class MainGameAttributes : MonoBehaviour {
     [HideInInspector]public MainWeariableMechanism oneShotWearable;
 
     [Header("Ranks")]
-    public RankVideo[] VideoClips;
+    public VideoClip[] VideoClips;
+    public AudioClip[] RankingSounds;
 
     //Controlls
     GlobalControlls Controls; Gamepad gamepad;
 
     public static event System.Action OnGameStart;
+    public static event System.Action OnLateGameStart;
 
     public static event System.Action OnLowGraphDraw;
     public static event System.Action OnMediumGraphDraw;
@@ -86,34 +92,41 @@ public class MainGameAttributes : MonoBehaviour {
         WearableValue = value;
     }
     public void AddWearable() {
-        oneShotWearable = null;
-        OnGamepadWearableScroll?.Invoke();
-        if (oneShotWearable == null) {
-            SelectDefaultWearable?.Invoke();
-        } else {
-            oneShotWearable.OnPress();
+        if (State == GameStates.preGame) {
+            oneShotWearable = null;
+            OnGamepadWearableScroll?.Invoke();
+            if (oneShotWearable == null) {
+                SelectDefaultWearable?.Invoke();
+            } else {
+                oneShotWearable.OnPress();
+            }
         }
     }
     void AddDifficulty() {
-        switch (Difficulty) {
-            case GameDifficulties.easy : AssignDifficulty(1); break;
-            case GameDifficulties.normal : AssignDifficulty(2); break;
-            case GameDifficulties.hard : AssignDifficulty(0); break;
+        if (State == GameStates.preGame) {
+            switch (Difficulty) {
+                case GameDifficulties.easy : AssignDifficulty(1); break;
+                case GameDifficulties.normal : AssignDifficulty(2); break;
+                case GameDifficulties.hard : AssignDifficulty(0); break;
+            }
         }
     }
     public void RunGame() {
-        OnGameStart?.Invoke();
-        State = GameStates.game;
-        TranslateDifficulty();
-        preGameSetup.SetActive(false);
-        GameplaySetup.SetActive(true);
-        gameObject.GetComponent<Camera>().enabled = false;
+        if (State == GameStates.preGame) {
+            OnGameStart?.Invoke();
+            State = GameStates.game;
+            TranslateDifficulty();
+            preGameSetup.SetActive(false);
+            GameplaySetup.SetActive(true);
+            OnLateGameStart?.Invoke();
+            gameObject.GetComponent<Camera>().enabled = false;
 
-        OnDetailDraw(DetalizationLevels.low);
-        OnDetailDraw(DetalizationLevels.medium);
-        OnDetailDraw(DetalizationLevels.high);
+            OnDetailDraw(DetalizationLevels.low);
+            OnDetailDraw(DetalizationLevels.medium);
+            OnDetailDraw(DetalizationLevels.high);
 
-        PlayerRenderer.sprite = GameWearables[WearableValue - 1];
+            PlayerRenderer.sprite = GameWearables[WearableValue - 1];
+        }
     }
     //Game
     void Update() {
@@ -170,8 +183,49 @@ public class MainGameAttributes : MonoBehaviour {
     public virtual void UpdateSituation() {
         SituationDisplay.text = $"MainGameAttribute is runs the process. difficulty : {TranslatedDifficulty}";
     }
+    public void EndGame() {
+        if (State == GameStates.game) {
+            State = GameStates.endGame;
+
+            GameplaySetup.SetActive(false);
+            RankingSetup.SetActive(true);
+            
+            VideoScreen.clip = VideoClips[WearableValue - 1];
+            StartCoroutine(RunEnding());
+        }
+    }
+    public virtual IEnumerator RunEnding() {
+        RankingScreenClosed.SetActive(true);
+        VideoScreen.enabled = false;
+        VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[0]);
+        yield return new WaitForSeconds(1.25f);
+        RankingScreenClosed.SetActive(false);
+        VideoScreen.enabled = true;
+        VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[1]);
+        SaveSessionProgress();
+        int slides = 6;
+        for (int i = 0; i < slides; i++) {
+            switch(i) {
+                case 0 : RankingText.text = ""; break;
+                case 1 : RankingText.text += "Hey There!"; break;
+                case 2 : RankingText.text += "\nThis scene is running by MainAttributes."; break;
+                case 3 : RankingText.text += "\nOverride it in new Attributes."; break;
+                case 4 : RankingText.text += "\nRewards saved;"; break;
+                case 5 : RankingText.text += "\nEscape/Down(Gamepad) to escape."; break;
+            }
+            if (i == slides-1) {
+                VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[3]);
+            } else {
+                VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[2]);
+            }
+            yield return new WaitForSeconds(0.75f);
+        }
+    }
+    public virtual void SaveSessionProgress() {
+        //saving alghorytm in override.
+    }
     public void ReloadOrExit() {
-        if (State == GameStates.preGame) {
+        if (State == GameStates.preGame || State == GameStates.endGame) {
             if (gamepad != null) {
                 gamepad.SetMotorSpeeds(0, 0); 
             }

@@ -5,11 +5,11 @@ using XD.Games;
 #region Class
 public class MainTaggedObject : MonoBehaviour {
     public DetalizationLevels DrawOn;
-    MainGameAttributes attributes;
+     //public MainGameAttributes attributes;
     bool isDrawn;
 
     void OnEnable() { 
-        attributes = GameObject.Find("Main Camera").gameObject.GetComponent<MainGameAttributes>();
+        //attributes = GameObject.Find("Main Camera").GetComponent<MainGameAttributes>();
     
         MainGameAttributes.OnLowGraphDraw += HandleLow;
         MainGameAttributes.OnMediumGraphDraw += HandleMedium;

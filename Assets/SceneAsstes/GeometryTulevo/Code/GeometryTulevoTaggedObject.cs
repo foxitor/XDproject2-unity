@@ -10,15 +10,50 @@ public class GeometryTulevoTaggedObject : MainTaggedObject {
     public float rotationSpeed;
     public bool layerChanger;
     public string objectSubtype;
+
+    GeometryTulevoAttributes attributes;
+
     [Header("-loot-")]
     bool isLooted;
     public int lootChance;
     public GameObject[] posibleLoots;
+
+    void OnEnable() {
+        if (Type == GTObjTypes.wallpaintedTip) {
+            GeometryTulevoAttributes.NewLayer += OnLayer;
+        }
+    }
+    void OnDisable() {
+        if (Type == GTObjTypes.wallpaintedTip) {
+            GeometryTulevoAttributes.NewLayer -= OnLayer;
+        }
+    }
+    void Start() {
+        attributes = GameObject.Find("Main Camera").GetComponent<GeometryTulevoAttributes>();
+        OnLayer();
+    }
     void Update() {
         if (Type == GTObjTypes.saw) {
             transform.Rotate(0, 0, -180 * rotationSpeed * Time.deltaTime);
         }
     } 
+    void OnLayer() {
+        if (Type == GTObjTypes.wallpaintedTip) {
+            if (objectSubtype == "dash-unlocked") {
+                if (attributes.layersSearched == attributes.dashGoal) {
+                    if (TryGetComponent<Renderer>(out var r)) { r.enabled = true; }
+                } else { 
+                    if (TryGetComponent<Renderer>(out var r)) { r.enabled = false; }
+                }
+            } else if (objectSubtype == "lootChance") {
+                if (attributes.layersSearched == lootChance) {
+                    if (TryGetComponent<Renderer>(out var r)) { r.enabled = true; }
+                } else { 
+                    if (TryGetComponent<Renderer>(out var r)) { r.enabled = false; }
+                }
+            }
+        }
+    }
     public void OpenBox() {
         isLooted = true;
         transform.GetChild(0).gameObject.SetActive(false);

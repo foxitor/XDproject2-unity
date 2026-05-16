@@ -32,7 +32,8 @@ namespace XD.Games {
         spike, saw,
         orb, gravityOrb,
         teleportPortal, reversePortal, gravityPortal,
-        interactive, item
+        interactive, item,
+        wallpaintedTip
     }
     #endregion
 }
