@@ -183,7 +183,7 @@ public class MainGameAttributes : MonoBehaviour {
     public virtual void UpdateSituation() {
         SituationDisplay.text = $"MainGameAttribute is runs the process. difficulty : {TranslatedDifficulty}";
     }
-    public void EndGame() {
+    public virtual void EndGame() {
         if (State == GameStates.game) {
             State = GameStates.endGame;
 

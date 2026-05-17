@@ -59,5 +59,54 @@ public class GeometryTulevoAttributes : MainGameAttributes {
             Instantiate(bulletObject, spawnPos, spawns[pick].rotation, spawns[pick]);
         }
     }
+    public override void EndGame() {
+        if (State == GameStates.game) {
+            State = GameStates.endGame;
+
+            GameplaySetup.SetActive(false);
+            RankingSetup.SetActive(true);
+            
+            VideoScreen.clip = VideoClips[WearableValue - 1];
+            StartCoroutine(RunEnding());
+        }
+    }
+    public override IEnumerator RunEnding() {
+        RankingScreenClosed.SetActive(true);
+        VideoScreen.enabled = false;
+        VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[0]);
+        yield return new WaitForSeconds(1.25f);
+        RankingScreenClosed.SetActive(false);
+        VideoScreen.enabled = true;
+        VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[1]);
+        SaveSessionProgress();
+        int slides = 10;
+        for (int i = 0; i < slides; i++) {
+            switch(i) {
+                case 0 : RankingText.text = ""; break;
+                case 1 : RankingText.text += "Рандомная концовка - []"; break;
+                case 2 : RankingText.text += "\n?Достижение за концовку;"; break;
+
+                case 3 : RankingText.text += "\n\nСложность Забега - []"; break;
+                case 4 : RankingText.text += "\n?Достижение за сложность;"; break;
+
+                case 5 : RankingText.text += "\n\nСезон Забега - []"; break;
+                case 6 : RankingText.text += "\n?Достижение за сезон;"; break;
+
+                case 7 : RankingText.text += "\n\nВыполненное Испытание - []"; break;
+                case 8 : RankingText.text += "\n?Достижение за испытание;"; break;
+
+                case 9 : 
+                    RankingText.text += "\n\nЗаработанное сохраненно;"; 
+                    RankingText.text += "\nEscape / Down(геймпад) что бы выйти."; 
+                break;
+            }
+            if (i == slides-1) {
+                VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[3]);
+            } else {
+                VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[2]);
+            }
+            yield return new WaitForSeconds(1f);
+        }
+    }
 }
 #endregion
