@@ -101,6 +101,11 @@ namespace XD.Prefs {
             //Debug.Log($"currently contacting the subscribers.");
             //Debug.Log($"Data must be in place. if some data was completly erased, RIP to theese...");
         }
+        public bool isNull(string Pref) {
+            if (!PlayerPrefs.HasKey(Pref) || PlayerPrefs.GetInt(Pref) == 0) {
+                Debug.Log("Isnull = true"); return true; 
+            } else { Debug.Log("Isnull = false"); return false; }
+        }
     }
     [System.Serializable]
     public class ProtectedIntMemory {

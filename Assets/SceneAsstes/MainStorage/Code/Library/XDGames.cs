@@ -22,9 +22,9 @@ namespace XD.Games {
         high
     }
     [System.Serializable]
-    public class RankVideo {
-        public string NameKey;
-        public VideoClip Clip;
+    public class RankScreenAttribute {
+        public string textReturn;
+        public bool justObtained;
     }
     #region localGameData
     //GT

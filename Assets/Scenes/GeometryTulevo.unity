@@ -24314,8 +24314,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 350, y: 0}
-  m_SizeDelta: {x: 675, y: 1080}
+  m_AnchoredPosition: {x: 350, y: -100}
+  m_SizeDelta: {x: 675, y: 879}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &564430161
 MonoBehaviour:
@@ -24354,7 +24354,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 33fef3479fb1f714098bdd30c873e3b6, type: 3}
-    m_FontSize: 37
+    m_FontSize: 32
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
@@ -62731,6 +62731,25 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 678293dc7cb9a7340832bce22eb813ff, type: 3}
   - {fileID: 8300000, guid: 5287e33bb58e2f841b1b6ebabe54daf1, type: 3}
   - {fileID: 8300000, guid: 2d791411fb62adc4ebc59ae70eb20190, type: 3}
+  endings:
+  - GTE-Dantess
+  - GTE-Sucsess
+  - GTE-Spender
+  - GTE-Signs
+  - GTE-Maboya
+  - GTE-Wasted
+  endingRankByte:
+    textReturn: 
+    justObtained: 0
+  seasonRankByte:
+    textReturn: 
+    justObtained: 0
+  challangeRankByte:
+    textReturn: 
+    justObtained: 0
+  difficultyRankByte:
+    textReturn: 
+    justObtained: 0
   bulletObject: {fileID: 5546545808976022099, guid: 6c54fa1d7b1893049a6e769ca9e2ef4f, type: 3}
   spawns:
   - {fileID: 744384474}
@@ -62744,7 +62763,7 @@ MonoBehaviour:
   - {fileID: 468099561}
   - {fileID: 843352896}
   - {fileID: 1931064302}
-  collectedBullets: 0
+  collectedBullets: 42
   bulletGoal: 0
   layersSearched: 0
   bulletsPerLayer: 2

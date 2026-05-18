@@ -37,6 +37,12 @@ public class MainGameAttributes : MonoBehaviour {
     [Header("Ranks")]
     public VideoClip[] VideoClips;
     public AudioClip[] RankingSounds;
+    public string[] endings;
+
+    [HideInInspector]public RankScreenAttribute endingRankByte;
+    [HideInInspector]public RankScreenAttribute seasonRankByte;
+    [HideInInspector]public RankScreenAttribute challangeRankByte;
+    [HideInInspector]public RankScreenAttribute difficultyRankByte;
 
     //Controlls
     GlobalControlls Controls; Gamepad gamepad;
@@ -124,8 +130,8 @@ public class MainGameAttributes : MonoBehaviour {
             OnDetailDraw(DetalizationLevels.low);
             OnDetailDraw(DetalizationLevels.medium);
             OnDetailDraw(DetalizationLevels.high);
-
-            PlayerRenderer.sprite = GameWearables[WearableValue - 1];
+            if (WearableValue <= 0) { WearableValue = 1; } 
+            PlayerRenderer.sprite = GameWearables[WearableValue - 1]; 
         }
     }
     //Game

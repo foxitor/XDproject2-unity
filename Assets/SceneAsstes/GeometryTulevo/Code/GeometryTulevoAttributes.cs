@@ -83,20 +83,20 @@ public class GeometryTulevoAttributes : MainGameAttributes {
         for (int i = 0; i < slides; i++) {
             switch(i) {
                 case 0 : RankingText.text = ""; break;
-                case 1 : RankingText.text += "Рандомная концовка - []"; break;
-                case 2 : RankingText.text += "\n?Достижение за концовку;"; break;
+                case 1 : RankingText.text += $"‣Рандомная концовка - ''{endingRankByte.textReturn}''"; break;
+                case 2 : RankingText.text += $"\nНовая концовка? : {(endingRankByte.justObtained ? "• Да!" : "∘ Нет")};"; break;
 
-                case 3 : RankingText.text += "\n\nСложность Забега - []"; break;
-                case 4 : RankingText.text += "\n?Достижение за сложность;"; break;
+                case 3 : RankingText.text += $"\n\n‣Сложность Забега - ''[]''"; break;
+                case 4 : RankingText.text += $"\n?Достижение за сложность;"; break;
 
-                case 5 : RankingText.text += "\n\nСезон Забега - []"; break;
-                case 6 : RankingText.text += "\n?Достижение за сезон;"; break;
+                case 5 : RankingText.text += $"\n\n‣Сезон Забега - ''[]''"; break;
+                case 6 : RankingText.text += $"\n?Достижение за сезон;"; break;
 
-                case 7 : RankingText.text += "\n\nВыполненное Испытание - []"; break;
-                case 8 : RankingText.text += "\n?Достижение за испытание;"; break;
+                case 7 : RankingText.text += $"\n\n‣Выполненное Испытание - ''[]''"; break;
+                case 8 : RankingText.text += $"\n?Достижение за испытание;"; break;
 
                 case 9 : 
-                    RankingText.text += "\n\nЗаработанное сохраненно;"; 
+                    RankingText.text += "\n\n‣‣Заработанное сохраненно;"; 
                     RankingText.text += "\nEscape / Down(геймпад) что бы выйти."; 
                 break;
             }
@@ -107,6 +107,25 @@ public class GeometryTulevoAttributes : MainGameAttributes {
             }
             yield return new WaitForSeconds(1f);
         }
+    }
+    public override void SaveSessionProgress() {
+        //RandomEndingRank
+        int randomSeed = Random.Range(0, endings.Length);
+        string variant = endings[randomSeed];
+        //>Translate
+        switch (randomSeed) {
+            case 0 : endingRankByte.textReturn = "Алё пушкин, я дантес"; break;
+            case 1 : endingRankByte.textReturn = "Я затулил Скулика."; break;
+            case 2 : endingRankByte.textReturn = "У меня патроны закончились..."; break;
+            case 3 : endingRankByte.textReturn = "Кинул распальцовку"; break;
+            case 4 : endingRankByte.textReturn = "ЭУ МА БОЙЯ!!1!"; break;
+            case 5 : endingRankByte.textReturn = "Скулик сдался!"; break;
+            default : endingRankByte.textReturn = "Unknown error happened, contact the dev."; break;
+        }
+        //>isNew?
+        if (AdvancedPPfs.Core.isNull(variant)) { endingRankByte.justObtained = true; } else { endingRankByte.justObtained = false; }
+        PlayerPrefs.SetInt(variant, 1);
+        //DifficultyRank
     }
 }
 #endregion
