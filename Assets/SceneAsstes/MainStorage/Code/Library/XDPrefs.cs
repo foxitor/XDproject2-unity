@@ -103,8 +103,8 @@ namespace XD.Prefs {
         }
         public bool isNull(string Pref) {
             if (!PlayerPrefs.HasKey(Pref) || PlayerPrefs.GetInt(Pref) == 0) {
-                Debug.Log("Isnull = true"); return true; 
-            } else { Debug.Log("Isnull = false"); return false; }
+                return true; 
+            } else { return false; }
         }
     }
     [System.Serializable]

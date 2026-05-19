@@ -86,17 +86,35 @@ public class GeometryTulevoAttributes : MainGameAttributes {
                 case 1 : RankingText.text += $"‣Рандомная концовка - ''{endingRankByte.textReturn}''"; break;
                 case 2 : RankingText.text += $"\nНовая концовка? : {(endingRankByte.justObtained ? "• Да!" : "∘ Нет")};"; break;
 
-                case 3 : RankingText.text += $"\n\n‣Сложность Забега - ''[]''"; break;
-                case 4 : RankingText.text += $"\n?Достижение за сложность;"; break;
+                case 3 : RankingText.text += $"\n\n‣Сложность Забега - ''{difficultyRankByte.textReturn}''"; break;
+                case 4 : RankingText.text += $"\nНовая сложность? : {(difficultyRankByte.justObtained ? "• Да!" : "∘ Нет")};"; break;
 
-                case 5 : RankingText.text += $"\n\n‣Сезон Забега - ''[]''"; break;
-                case 6 : RankingText.text += $"\n?Достижение за сезон;"; break;
+                case 5 : RankingText.text += $"\n\n‣Сезон Забега - ''{seasonRankByte.textReturn}''"; break;
+                case 6 : RankingText.text += $"\nНовый сезон? : {(seasonRankByte.justObtained ? "• Да!" : "∘ Нет")};"; break;
 
-                case 7 : RankingText.text += $"\n\n‣Выполненное Испытание - ''[]''"; break;
-                case 8 : RankingText.text += $"\n?Достижение за испытание;"; break;
+                case 7 : 
+                    string compiledChallanges = "";
+                    for (int step = 0; step <= challangeRankAmount-1; step++) { 
+                        compiledChallanges += challangeRankByte[step].textReturn; 
+                        if (step <= challangeRankAmount-2) {
+                            compiledChallanges += ", ";
+                        }
+                    }
+                    RankingText.text += $"\n\n‣Выполненное(-ые) Испытание(-я) - \n{compiledChallanges}"; 
+                    break;
+                case 8 : 
+                    string compiledObtains = "";
+                    for (int step = 0; step <= challangeRankAmount-1; step++) { 
+                        compiledObtains += (challangeRankByte[step].justObtained ? "• Да!" : "∘ Нет"); 
+                        if (step <= challangeRankAmount-2) {
+                            compiledObtains += ", ";
+                        }
+                    }
+                    RankingText.text += $"\nВпервые выполненно(-ы)? : {compiledObtains};"; 
+                break;
 
                 case 9 : 
-                    RankingText.text += "\n\n‣‣Заработанное сохраненно;"; 
+                    RankingText.text += "\n\n>‣Заработанное сохраненно;"; 
                     RankingText.text += "\nEscape / Down(геймпад) что бы выйти."; 
                 break;
             }
@@ -111,7 +129,7 @@ public class GeometryTulevoAttributes : MainGameAttributes {
     public override void SaveSessionProgress() {
         //RandomEndingRank
         int randomSeed = Random.Range(0, endings.Length);
-        string variant = endings[randomSeed];
+        string endVariant = endings[randomSeed];
         //>Translate
         switch (randomSeed) {
             case 0 : endingRankByte.textReturn = "Алё пушкин, я дантес"; break;
@@ -123,9 +141,47 @@ public class GeometryTulevoAttributes : MainGameAttributes {
             default : endingRankByte.textReturn = "Unknown error happened, contact the dev."; break;
         }
         //>isNew?
-        if (AdvancedPPfs.Core.isNull(variant)) { endingRankByte.justObtained = true; } else { endingRankByte.justObtained = false; }
-        PlayerPrefs.SetInt(variant, 1);
+        if (AdvancedPPfs.Core.isNull(endVariant)) { endingRankByte.justObtained = true; } else { endingRankByte.justObtained = false; }
+        PlayerPrefs.SetInt(endVariant, 1);
+
         //DifficultyRank
+        string difficultyVariant = "";
+        difficultyRankByte.textReturn = TranslatedDifficulty;
+        //>TranslateToPreff
+        switch (Difficulty) {
+            case GameDifficulties.easy : difficultyVariant = "GTD-easy"; break;
+            case GameDifficulties.normal : difficultyVariant = "GTD-normal"; break;
+            case GameDifficulties.hard : difficultyVariant = "GTD-hard"; break;
+            case GameDifficulties.test : difficultyVariant = "kill"; break;
+        }
+        //>isNew?
+        if (AdvancedPPfs.Core.isNull(difficultyVariant)) { difficultyRankByte.justObtained = true; } else { difficultyRankByte.justObtained = false; }
+        PlayerPrefs.SetInt(difficultyVariant, 1);
+
+        //SeasonRank
+        string seasonVariant = "";
+        //>Translates
+        switch (PlayerPrefs.GetInt("Season")) {
+            case 0 : seasonRankByte.textReturn = "Обыденность"; seasonVariant = "GTS-neutral"; break;
+            case 1 : seasonRankByte.textReturn = "Снежность"; seasonVariant = "GTS-cold"; break;
+            case 2 : seasonRankByte.textReturn = "Жаркость"; seasonVariant = "GTS-warm"; break;
+        }
+        //>isNew?
+        if (AdvancedPPfs.Core.isNull(seasonVariant)) { seasonRankByte.justObtained = true; } else { seasonRankByte.justObtained = false; }
+        PlayerPrefs.SetInt(seasonVariant, 1);
+
+        //ChallangeRank
+        challangeRankAmount = 0;
+        if (collectedBullets >= 25) {
+            if (AdvancedPPfs.Core.isNull("GTC-LeftAlone")) { 
+                challangeRankByte[challangeRankAmount].justObtained = true; 
+            } else { 
+                challangeRankByte[challangeRankAmount].justObtained = false; 
+            }
+            challangeRankByte[challangeRankAmount].textReturn = "''Но никто не пришёл''";
+            PlayerPrefs.SetInt(("GTC-LeftAlone"), 1);
+            challangeRankAmount++;
+        }
     }
 }
 #endregion

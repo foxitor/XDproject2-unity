@@ -41,8 +41,9 @@ public class MainGameAttributes : MonoBehaviour {
 
     [HideInInspector]public RankScreenAttribute endingRankByte;
     [HideInInspector]public RankScreenAttribute seasonRankByte;
-    [HideInInspector]public RankScreenAttribute challangeRankByte;
+    [HideInInspector]public RankScreenAttribute[] challangeRankByte = new RankScreenAttribute[10];
     [HideInInspector]public RankScreenAttribute difficultyRankByte;
+    [HideInInspector]public int challangeRankAmount; 
 
     //Controlls
     GlobalControlls Controls; Gamepad gamepad;
@@ -136,13 +137,16 @@ public class MainGameAttributes : MonoBehaviour {
     }
     //Game
     void Update() {
+        if (Input.GetKey(KeyCode.Escape)) {
+            ReloadOrExit();
+        }
         if (State == GameStates.preGame) {
-            if (gamepad != null) {
-            } 
+            return;
         }
         else if (State == GameStates.endGame) { return; }
         else {
             UpdateSituation();
+            
         }
     }
     void OnDetailDraw(DetalizationLevels level) {
