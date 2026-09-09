@@ -39,6 +39,10 @@ public class MainGameAttributes : MonoBehaviour {
     public AudioClip[] RankingSounds;
     public string[] endings;
 
+    [Header("Seasonal")]
+    public GameObject[] WinterGroup;
+    public GameObject[] SummerGroup;
+
     [HideInInspector]public RankScreenAttribute endingRankByte;
     [HideInInspector]public RankScreenAttribute seasonRankByte;
     [HideInInspector]public RankScreenAttribute[] challangeRankByte = new RankScreenAttribute[10];
@@ -128,6 +132,7 @@ public class MainGameAttributes : MonoBehaviour {
             OnLateGameStart?.Invoke();
             gameObject.GetComponent<Camera>().enabled = false;
 
+            ActivateSeason();
             OnDetailDraw(DetalizationLevels.low);
             OnDetailDraw(DetalizationLevels.medium);
             OnDetailDraw(DetalizationLevels.high);
@@ -168,6 +173,14 @@ public class MainGameAttributes : MonoBehaviour {
                 break;
         }
     }
+    public virtual void ActivateSeason() {
+        //Disable all of them
+        foreach (GameObject obj in WinterGroup) { obj.SetActive(false); }
+        foreach (GameObject obj in SummerGroup) { obj.SetActive(false); }
+        //Activate correct season
+        foreach (GameObject obj in WinterGroup) { obj.SetActive(PlayerPrefs.GetInt("Season") == 1); }
+        foreach (GameObject obj in SummerGroup) { obj.SetActive(PlayerPrefs.GetInt("Season") == 2); }
+    }
     string translateMenuDifficulty() {
         string product = "";
         switch (Difficulty) {
@@ -191,7 +204,7 @@ public class MainGameAttributes : MonoBehaviour {
         TranslatedDifficulty = product;
     }
     public virtual void UpdateSituation() {
-        SituationDisplay.text = $"MainGameAttribute is runs the process. difficulty : {TranslatedDifficulty}";
+        SituationDisplay.text = $"MainGameAttribute is runs this process. difficulty : {TranslatedDifficulty}";
     }
     public virtual void EndGame() {
         if (State == GameStates.game) {
@@ -221,7 +234,7 @@ public class MainGameAttributes : MonoBehaviour {
                 case 2 : RankingText.text += "\nThis scene is running by MainAttributes."; break;
                 case 3 : RankingText.text += "\nOverride it in new Attributes."; break;
                 case 4 : RankingText.text += "\nRewards saved;"; break;
-                case 5 : RankingText.text += "\nEscape/Down(Gamepad) to escape."; break;
+                case 5 : RankingText.text += "\nEscape/Down(Gamepad) to escape. \ncontact the dev if ur seening this."; break;
             }
             if (i == slides-1) {
                 VideoScreen.GetComponent<AudioSource>().PlayOneShot(RankingSounds[3]);

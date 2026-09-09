@@ -27,6 +27,7 @@ public class GTShigimaController : MonoBehaviour {
     [Header("-sounds-")]
     public AudioClip[] orbHopSounds;
     public AudioClip[] dashSounds;
+    public AudioClip[] coinSounds;
     public AudioClip deathCall;
     public AudioClip teleporing;
 
@@ -221,6 +222,7 @@ public class GTShigimaController : MonoBehaviour {
                 case GTObjTypes.item :
                     if (Modifier.objectSubtype == "Bullet") {
                         Attributes.collectedBullets++;
+                        mySource.PlayOneShot(coinSounds[Random.Range(0, coinSounds.Length)]);
                         Destroy(Modifier.gameObject);
                     }
                 break;

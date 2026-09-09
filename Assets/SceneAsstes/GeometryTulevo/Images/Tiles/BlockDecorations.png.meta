@@ -3,7 +3,7 @@ guid: 1e91590849be83c4ba91abeaff5e4bc3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 13
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -77,7 +77,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -90,7 +89,18 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 1
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -160,7 +170,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlockDecorations_0
+      name: CobwebDecal
       rect:
         serializedVersion: 2
         x: 384
@@ -181,7 +191,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlockDecorations_1
+      name: 8thDinoGraffity
       rect:
         serializedVersion: 2
         x: 512
@@ -202,7 +212,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlockDecorations_2
+      name: RibbitGraffity
       rect:
         serializedVersion: 2
         x: 640
@@ -223,7 +233,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlockDecorations_3
+      name: 5RublesGraffity
       rect:
         serializedVersion: 2
         x: 768
@@ -244,7 +254,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlockDecorations_4
+      name: HeavickGraffity
       rect:
         serializedVersion: 2
         x: 0
@@ -264,6 +274,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PipukaPTSdGraffity
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 744
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae2d23db899094d44803fda9bdc7d876
+      internalID: -498101019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnowDecoration
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 616
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07b07f735e6ea7043b7f0286ca2cecfe
+      internalID: -134229162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -275,14 +327,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      BlockDecorations_0: 1783145120
-      BlockDecorations_1: -2006103873
-      BlockDecorations_2: 1303365672
-      BlockDecorations_3: -430021373
-      BlockDecorations_4: 1187390835
+      5RublesGraffity: -430021373
+      8thDinoGraffity: -2006103873
       BrickDecal: 1459406132
+      CobwebDecal: 1783145120
+      HeavickGraffity: 1187390835
+      PipukaPTSdGraffity: -498101019
+      RibbitGraffity: 1303365672
       RustierBlock: 732525430
       RustyBlock: 136378928
+      SnowDecoration: -134229162
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

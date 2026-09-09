@@ -3,7 +3,7 @@ guid: 4d80dacc42c33c94ebd767612b3b2cd1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 13
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -77,7 +77,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -90,14 +89,25 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 1
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BatyaWarning
+      name: BatyaPaper
       rect:
         serializedVersion: 2
         x: 3
@@ -139,7 +149,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_0
+      name: DogPaper
       rect:
         serializedVersion: 2
         x: 314
@@ -160,7 +170,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_1
+      name: Dash
       rect:
         serializedVersion: 2
         x: 3
@@ -168,7 +178,7 @@ TextureImporter:
         width: 227
         height: 103
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,7 +191,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_2
+      name: Jump
       rect:
         serializedVersion: 2
         x: 265
@@ -189,7 +199,7 @@ TextureImporter:
         width: 236
         height: 118
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,7 +212,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_3
+      name: Unlocked
       rect:
         serializedVersion: 2
         x: 0
@@ -210,7 +220,7 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -223,7 +233,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_4
+      name: DashIcon
       rect:
         serializedVersion: 2
         x: 128
@@ -231,7 +241,7 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -244,7 +254,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_5
+      name: UpsidedownWarning
       rect:
         serializedVersion: 2
         x: 256
@@ -252,7 +262,7 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -265,7 +275,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_6
+      name: DownwardFacingArrow
       rect:
         serializedVersion: 2
         x: 384
@@ -273,7 +283,7 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,7 +296,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WallPaintings_7
+      name: BentArrow
       rect:
         serializedVersion: 2
         x: 512
@@ -294,7 +304,7 @@ TextureImporter:
         width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -302,6 +312,69 @@ TextureImporter:
       bones: []
       spriteID: 34719ce85d6665a4ea8bc21b1131c9c3
       internalID: 1768931269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MouseLeftClick
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 355
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2b7cbe1d2e6ff84989179eed31f594a
+      internalID: -972882102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MouseRIghtClick
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 355
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: baa1b7b6b44cdbc4b820a5f1252b0714
+      internalID: 970948801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PearPaper
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 774
+        width: 152
+        height: 226
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47c3224d4c14faa42a5f452b042464ff
+      internalID: 165298010
       vertices: []
       indices: 
       edges: []
@@ -317,16 +390,19 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      BatyaWarning: -1239611032
+      BatyaPaper: -1239611032
+      BentArrow: 1768931269
+      Dash: 957953081
+      DashIcon: 1536766833
+      DogPaper: -1034053476
+      DownwardFacingArrow: -751165764
+      Jump: -226592308
+      MouseLeftClick: -972882102
+      MouseRIghtClick: 970948801
       Paper: -1714669950
-      WallPaintings_0: -1034053476
-      WallPaintings_1: 957953081
-      WallPaintings_2: -226592308
-      WallPaintings_3: -389911247
-      WallPaintings_4: 1536766833
-      WallPaintings_5: -1825376394
-      WallPaintings_6: -751165764
-      WallPaintings_7: 1768931269
+      PearPaper: 165298010
+      Unlocked: -389911247
+      UpsidedownWarning: -1825376394
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

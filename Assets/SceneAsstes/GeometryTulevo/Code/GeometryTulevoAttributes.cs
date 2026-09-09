@@ -100,6 +100,7 @@ public class GeometryTulevoAttributes : MainGameAttributes {
                             compiledChallanges += ", ";
                         }
                     }
+                    if (compiledChallanges == "") { compiledChallanges = "Нету"; }
                     RankingText.text += $"\n\n‣Выполненное(-ые) Испытание(-я) - \n{compiledChallanges}"; 
                     break;
                 case 8 : 
