@@ -28,8 +28,11 @@ public class GTShigimaController : MonoBehaviour {
     public AudioClip[] orbHopSounds;
     public AudioClip[] dashSounds;
     public AudioClip[] coinSounds;
+    public AudioClip[] radioPlaylist;
     public AudioClip deathCall;
     public AudioClip teleporing;
+    public AudioSource RadioPlayer;
+    int radioChannel;
 
     bool hasOrb, hasGravityOrb, hasBox;
     GameObject curBox; 
@@ -94,6 +97,13 @@ public class GTShigimaController : MonoBehaviour {
                 localCamera.gameObject.SetActive(false);
                 Attributes.EndGame();
             }
+        }
+        if (Input.GetKeyDown(KeyCode.M)) {
+            radioChannel++;
+            if (radioChannel > radioPlaylist.Length-1) { radioChannel = 0; }
+            RadioPlayer.Stop();
+            RadioPlayer.clip = radioPlaylist[radioChannel];
+            RadioPlayer.Play();
         }
     } 
     void FixedUpdate() {
@@ -267,9 +277,8 @@ public class GTShigimaController : MonoBehaviour {
     IEnumerator Dying() {
         Phy.bodyType = RigidbodyType2D.Static; 
         cameraMessengeGroup.transform.GetChild(2).gameObject.SetActive(false);
-        //Game.Music.Stop();
+        RadioPlayer.Stop();
         canMove = false; 
-        //Game.DeadMessange.SetActive(true);
         mySource.PlayOneShot(deathCall);
         StartCoroutine(CameraMessenge(1, 4f));
         VibrateController(0f, 0.75f, 0.2f);
