@@ -100,7 +100,7 @@ public class GeometryTulevoAttributes : MainGameAttributes {
                             compiledChallanges += ", ";
                         }
                     }
-                    if (compiledChallanges == "") { compiledChallanges = "Нету"; }
+                    if (compiledChallanges == "") { compiledChallanges = "Нету..."; }
                     RankingText.text += $"\n\n‣Выполненное(-ые) Испытание(-я) - \n{compiledChallanges}"; 
                     break;
                 case 8 : 
@@ -111,7 +111,11 @@ public class GeometryTulevoAttributes : MainGameAttributes {
                             compiledObtains += ", ";
                         }
                     }
-                    RankingText.text += $"\nВпервые выполненно(-ы)? : {compiledObtains};"; 
+                    if (challangeRankAmount != 0) {
+                        RankingText.text += $"\nВпервые выполненно(-ы)? : {compiledObtains};"; 
+                    } else {
+                        RankingText.text += " Увы.!";
+                    }
                 break;
 
                 case 9 : 
