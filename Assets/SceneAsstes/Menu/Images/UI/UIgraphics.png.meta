@@ -211,6 +211,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Star
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 104
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f8ddd66c439b9243a96db605e7848e2
+      internalID: -1084718266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -225,6 +246,7 @@ TextureImporter:
       Checkmark: -179848583
       ExitDoor: 504355263
       LineSeporator: 1191944478
+      Star: -1084718266
       White2SemiTransparentGradient: -239123860
       White2TransparentGradient: 487260184
   mipmapLimitGroupName: 

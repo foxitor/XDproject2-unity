@@ -7,6 +7,7 @@ public class XDAdvancement : MonoBehaviour {
     public string AchivementPref;
     public string AdvancmentType = "Default";
         public string[] AllinPrefs;
+        public string RewardPref;
     
     void OnEnable() { AdvancedPPfs.OnDataReset += CheckPref; }
     void OnDisable() { AdvancedPPfs.OnDataReset -= CheckPref; }
@@ -24,6 +25,12 @@ public class XDAdvancement : MonoBehaviour {
                 }
                 Checkmark.SetActive(Complited);
                 if (Complited) { PlayerPrefs.SetInt(AchivementPref, 1); }
+            break;
+            case "Reward" : 
+                Checkmark.SetActive(!AdvancedPPfs.Core.isNull(AchivementPref)); 
+                if (!AdvancedPPfs.Core.isNull(AchivementPref)) {
+                    PlayerPrefs.SetInt(RewardPref, 1);
+                }
             break;
         }
     }

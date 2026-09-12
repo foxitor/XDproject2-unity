@@ -101,7 +101,11 @@ public class GeometryTulevoAttributes : MainGameAttributes {
                         }
                     }
                     if (compiledChallanges == "") { compiledChallanges = "Нету..."; }
-                    RankingText.text += $"\n\n‣Выполненное(-ые) Испытание(-я) - \n{compiledChallanges}"; 
+                    if (challangeRankAmount > 1) {
+                        RankingText.text += $"\n\n‣Выполненные Испытания - \n{compiledChallanges}"; 
+                    } else {
+                        RankingText.text += $"\n\n‣Выполненное Испытание - \n{compiledChallanges}"; 
+                    }
                     break;
                 case 8 : 
                     string compiledObtains = "";

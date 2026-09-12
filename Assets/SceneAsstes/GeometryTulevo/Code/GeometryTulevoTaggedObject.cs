@@ -55,9 +55,9 @@ public class GeometryTulevoTaggedObject : MainTaggedObject {
         }
     }
     public void OpenBox() {
+        SpawnLoot();
         isLooted = true;
         transform.GetChild(0).gameObject.SetActive(false);
-        SpawnLoot();
     }
     public void RestoreBox() {
         isLooted = false;

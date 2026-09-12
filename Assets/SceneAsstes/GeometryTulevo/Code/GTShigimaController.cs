@@ -105,6 +105,7 @@ public class GTShigimaController : MonoBehaviour {
             RadioPlayer.clip = radioPlaylist[radioChannel];
             RadioPlayer.Play();
         }
+        if (Input.GetKeyDown(KeyCode.N)) { RadioPlayer.Stop(); }
     } 
     void FixedUpdate() {
         if(Phy.velocity.y < -24.2f) { Phy.velocity = new Vector2(Phy.velocity.x, -24.2f); }
