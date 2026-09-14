@@ -84,6 +84,7 @@ public class MainGameAttributes : MonoBehaviour {
         gamepad = Gamepad.current;
         if (gamepad == null) { menuGamePadGroup.SetActive(false); }
         AssignDifficulty(1);
+        gameObject.GetComponent<Camera>().enabled = true;
         preGameSetup.SetActive(true);
         GameplaySetup.SetActive(false);
         RankingSetup.SetActive(false);
