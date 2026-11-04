@@ -6,15 +6,13 @@ using XD.UI; using XD.Prefs; using XD.Games;
 #region Class
 public class ChertoletAttributes : MainGameAttributes {
     [Header("UniqeSettings")]
-    public GameObject bulletObject;
-    public Transform[] spawns;
-    [Space]
-    public int collectedBullets;
-    public int bulletGoal;
-    public int layersSearched;
-    [Space]
-    public int bulletsPerLayer;
-    public int dashGoal; 
+    public ChertoletEvents CurrentEvent;
+    public Slider ProgressBar;
+    public float FlightTime = 0.0f;
+    public float WholeFlightTime = 0.0f;
+    public float EventDelay = 15.0f;
+    public int CurrentLap = 0;
+    public int MaxLaps = 5;
 
     public static event System.Action NewLayer;
 
@@ -22,42 +20,41 @@ public class ChertoletAttributes : MainGameAttributes {
         string product = "";
         switch (Difficulty) {
             case GameDifficulties.easy : 
-                product = "Плачущая тапка"; 
-                bulletGoal = 4;
-                bulletsPerLayer = 2;
+                product = "Попутный ветер"; 
+                EventDelay = 10.0f;
+                MaxLaps = 4;
                 break;
-            case GameDifficulties.normal : product = "Адекват"; 
-                bulletGoal = 7;
-                bulletsPerLayer = 2;
+            case GameDifficulties.normal : 
+                product = "Канон"; 
+                EventDelay = 15.0f;
+                MaxLaps = 5;
                 break;
-            case GameDifficulties.hard : product = "Пароклятие Альфредо."; 
-                bulletGoal = 14;
-                bulletsPerLayer = 1;
+            case GameDifficulties.hard : 
+                product = "Буря."; 
+                EventDelay = 20.0f;
+                MaxLaps = 4;
                 break;
-            case GameDifficulties.test : product = "dev test"; 
+            case GameDifficulties.test : 
+                product = "dev test"; 
+                EventDelay = 3.0f;
+                MaxLaps = 1;
                 break;
             default : product = "unknown"; break;
         }
         TranslatedDifficulty = product;
     }
     public override void UpdateSituation() {
-        SituationDisplay.text = $"Патронов найдено : {collectedBullets} / {bulletGoal}; Тяжкость : {TranslatedDifficulty}\nСлоёв обысканно : {layersSearched}";
+        FlightTime += Time.deltaTime;
+        WholeFlightTime += Time.deltaTime;
+        if (FlightTime >= EventDelay) {
+            FlightTime = 0.0f;
+            CurrentLap++;
+        }
+        ProgressBar.value = (WholeFlightTime/(EventDelay * MaxLaps));
+        SituationDisplay.text = $"Вертолётик брбрбрбрбр; Тяжкость : {TranslatedDifficulty}\nДо нового События - {(EventDelay - FlightTime).ToString("F1")} сек, Событий {CurrentLap}/{MaxLaps}";
     }
     public void OnNewLayer() {
         NewLayer?.Invoke();
-        //Deleting previous bullets
-        foreach (Transform spawn in spawns) {
-            if (spawn.childCount > 0) {
-                Destroy(spawn.GetChild(0).gameObject);
-            }
-        }
-        //Spawning the bullets
-        for (int i = 0; i < bulletsPerLayer; i++) {
-            int pick = Random.Range(0, spawns.Length);
-            Vector3 defPos = spawns[pick].position;
-            Vector3 spawnPos = new Vector3(defPos.x + Random.Range(-0.25f, 0.25f), defPos.y + Random.Range(-0.25f, 0.25f), defPos.z);
-            Instantiate(bulletObject, spawnPos, spawns[pick].rotation, spawns[pick]);
-        }
     }
     public override void EndGame() {
         if (State == GameStates.game) {
@@ -141,12 +138,12 @@ public class ChertoletAttributes : MainGameAttributes {
         string endVariant = endings[randomSeed];
         //>Translate
         switch (randomSeed) {
-            case 0 : endingRankByte.textReturn = "Алё пушкин, я дантес"; break;
-            case 1 : endingRankByte.textReturn = "Я затулил Скулика."; break;
-            case 2 : endingRankByte.textReturn = "У меня патроны закончились..."; break;
-            case 3 : endingRankByte.textReturn = "Кинул распальцовку"; break;
-            case 4 : endingRankByte.textReturn = "ЭУ МА БОЙЯ!!1!"; break;
-            case 5 : endingRankByte.textReturn = "Скулик сдался!"; break;
+            case 0 : endingRankByte.textReturn = "Одним Шигимой меньше!"; break;
+            case 1 : endingRankByte.textReturn = "Он Подорвал Чертолёт"; break;
+            case 2 : endingRankByte.textReturn = "Умер от Последнего Патрону..."; break;
+            case 3 : endingRankByte.textReturn = "Чертолётчик из меня плохой."; break;
+            case 4 : endingRankByte.textReturn = "Перехал Шигиму В доль и поперёк!"; break;
+            case 5 : endingRankByte.textReturn = "Пчела Стилит Мой Килл..."; break;
             default : endingRankByte.textReturn = "Unknown error happened, contact the dev."; break;
         }
         //>isNew?
@@ -181,7 +178,7 @@ public class ChertoletAttributes : MainGameAttributes {
 
         //ChallangeRank
         challangeRankAmount = 0;
-        if (collectedBullets >= 25) {
+        if (21 >= 25) {
             if (AdvancedPPfs.Core.isNull("GTC-LeftAlone")) { 
                 challangeRankByte[challangeRankAmount].justObtained = true; 
             } else { 
@@ -194,3 +191,9 @@ public class ChertoletAttributes : MainGameAttributes {
     }
 }
 #endregion
+[System.Serializable]
+public enum ChertoletEvents {
+    Rocks,
+    Chicken,
+    Liquid
+}

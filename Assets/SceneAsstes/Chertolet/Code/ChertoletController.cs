@@ -8,7 +8,6 @@ public class ChertoletController : MonoBehaviour {
     bool canMove = true;
 
     GameObject visual; SpriteRenderer visualRenderer;
-    public Camera localCamera;
     AudioSource mySource;
 
     public float FlapStrength = 3.5f;
@@ -47,11 +46,17 @@ public class ChertoletController : MonoBehaviour {
         targetRotation = Mathf.Clamp(targetRotation, -flapRotationLimit, flapRotationLimit);
         currentRotation = Mathf.Lerp(currentRotation, targetRotation, 2 * Time.deltaTime);
 
-        visual.transform.rotation = Quaternion.Euler(currentRotation, currentRotation, currentRotation);
+        visual.transform.rotation = Quaternion.Euler(0, 0, currentRotation);
         if (!canMove) { 
             Phy.simulated = false; 
         } else { 
             Phy.simulated = true; 
+        }
+        if (Attributes.CurrentLap >= Attributes.MaxLaps) {
+            cameraMessengeGroup.transform.GetChild(2).gameObject.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.Return)) {
+                Attributes.EndGame();
+            }
         }
     } 
     void Flap() {

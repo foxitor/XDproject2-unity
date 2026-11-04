@@ -906,8 +906,8 @@ Transform:
   m_GameObject: {fileID: 183722380}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4285714, z: 0}
-  m_LocalScale: {x: 1, y: 0.14285713, z: 1}
+  m_LocalPosition: {x: 0, y: 0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1314363295}
@@ -1327,7 +1327,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 226302353}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1146839115}
+        m_TargetAssemblyTypeName: MainGameAttributes, Assembly-CSharp
+        m_MethodName: ReloadOrExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &232874059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1448,7 +1460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8247b6df681de5458c3b65e422a1c87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localCamera: {fileID: 680545524}
   FlapStrength: 3.5
   flapRotationLimit: 30
   feedMessengeGroup: {fileID: 0}
@@ -3317,7 +3328,7 @@ Transform:
   m_GameObject: {fileID: 1083616822}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 5, z: 10}
+  m_LocalPosition: {x: 10, y: 5, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3335,7 +3346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14e4e929af0d35468befb7099d3dcfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DrawOn: 1
+  DrawOn: 0
 --- !u!199 &1083616825
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -5566,11 +5577,11 @@ ParticleSystem:
         m_RotationOrder: 4
     m_Range: {x: 0, y: 1}
   ForceModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -5
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -8203,7 +8214,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041F\u0440\u043E\u043A\u043B\u044F\u0442\u044C\u0435 \u0430\u043B\u044C\u0444\u0440\u0435\u0434\u043E."
+  m_Text: "\u0411\u0443\u0440\u044F."
 --- !u!222 &1084936535
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8457,7 +8468,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1146839108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcd44f3b594431c459e798e43c0ef867, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a5e7d6a82bbcf348b4c91ac565ae9ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   State: 0
@@ -8466,7 +8477,7 @@ MonoBehaviour:
   GameplaySetup: {fileID: 1311059962}
   RankingSetup: {fileID: 2089656599}
   difficultyDisplayText: {fileID: 152272093}
-  menuDifficultyPrefix: "\u043B\u0451\u0442\u043D\u043E\u0441\u0442\u044C : "
+  menuDifficultyPrefix: 
   VideoScreen: {fileID: 1644871168}
   RankingText: {fileID: 564430162}
   RankingScreenClosed: {fileID: 905915927}
@@ -8481,20 +8492,21 @@ MonoBehaviour:
   PlayerRenderer: {fileID: 1540188431}
   oneShotWearable: {fileID: 0}
   VideoClips:
-  - {fileID: 32900000, guid: e89f85e80e4e7c446b63e9f1392eaad9, type: 3}
-  - {fileID: 32900000, guid: c61ac3f6c2358b74a9147394722487fb, type: 3}
+  - {fileID: 32900000, guid: 76b5d7e0aa019cb4ebb0aa259f022644, type: 3}
+  - {fileID: 32900000, guid: 1c7b2ce7bafe83448a662f54897b80e4, type: 3}
+  - {fileID: 32900000, guid: 4d8d7d27605a2e448a27875fcc4e2a71, type: 3}
   RankingSounds:
   - {fileID: 8300000, guid: 943f927a0fb3f5a4bbcec6ee45303c12, type: 3}
   - {fileID: 8300000, guid: 678293dc7cb9a7340832bce22eb813ff, type: 3}
   - {fileID: 8300000, guid: 5287e33bb58e2f841b1b6ebabe54daf1, type: 3}
   - {fileID: 8300000, guid: 444e8084ec82d2843b86a16cf3fbdbf0, type: 3}
   endings:
-  - GTE-Dantess
-  - GTE-Sucsess
-  - GTE-Spender
-  - GTE-Signs
-  - GTE-Maboya
-  - GTE-Wasted
+  - CLE-TrueEnding
+  - CLE-BigBoom
+  - CLE-PureLuck
+  - CLE-Shipwreck
+  - CLE-RunnedOver
+  - CLE-BeeStealer
   WinterGroup: []
   SummerGroup: []
   endingRankByte:
@@ -8528,6 +8540,13 @@ MonoBehaviour:
     textReturn: 
     justObtained: 0
   challangeRankAmount: 0
+  CurrentEvent: 0
+  ProgressBar: {fileID: 707650850}
+  FlightTime: 0
+  WholeFlightTime: 0
+  EventDelay: 15
+  CurrentLap: 0
+  MaxLaps: 5
 --- !u!1 &1162470282
 GameObject:
   m_ObjectHideFlags: 0
@@ -8960,7 +8979,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041F\u043B\u0430\u0447\u0443\u0449\u0430\u044F \u0442\u0430\u043F\u043A\u0430"
+  m_Text: "\u041F\u043E\u043F\u0443\u0442\u043D\u044B\u0439 \u0412\u0435\u0442\u0435\u0440"
 --- !u!222 &1396485981
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9205,7 +9224,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0410\u0434\u0435\u043A\u0432\u0430\u0442"
+  m_Text: "\u041A\u0430\u043D\u043E\u043D"
 --- !u!222 &1481352228
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10252,8 +10271,8 @@ Transform:
   m_GameObject: {fileID: 1812990600}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.4285714, z: 0}
-  m_LocalScale: {x: 1, y: 0.14285713, z: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1314363295}
@@ -10815,7 +10834,7 @@ Transform:
   m_GameObject: {fileID: 1963752307}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 5, z: 7}
+  m_LocalPosition: {x: 10, y: 5, z: 7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10833,7 +10852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14e4e929af0d35468befb7099d3dcfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DrawOn: 2
+  DrawOn: 0
 --- !u!199 &1963752310
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -13064,11 +13083,11 @@ ParticleSystem:
         m_RotationOrder: 4
     m_Range: {x: 0, y: 1}
   ForceModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -5
       minScalar: 0
       maxCurve:
         serializedVersion: 2
