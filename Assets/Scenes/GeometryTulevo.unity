@@ -48837,7 +48837,7 @@ GameObject:
   - component: {fileID: 270496574}
   - component: {fileID: 270496575}
   m_Layer: 0
-  m_Name: Cheer
+  m_Name: message_cheer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114167,6 +114167,8 @@ MonoBehaviour:
   RankingScreenClosed: {fileID: 905915927}
   SituationDisplay: {fileID: 1972521082}
   TranslatedDifficulty: 
+  CameraMessageGroup: {fileID: 90284970}
+  LocalMessageGroup: {fileID: 1466429725}
   menuGamePadGroup: {fileID: 560184811}
   WearableValue: 0
   GameWearables:
@@ -134348,9 +134350,8 @@ GameObject:
   - component: {fileID: 1436693059}
   - component: {fileID: 1436693062}
   - component: {fileID: 1436693061}
-  - component: {fileID: 1436693060}
   m_Layer: 0
-  m_Name: GuideMSG
+  m_Name: message_start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134375,21 +134376,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -450}
   m_SizeDelta: {x: 800, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1436693060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436693058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.91764706, g: 0.59607846, b: 0, a: 0.29411766}
-  m_EffectDistance: {x: 3, y: -3}
-  m_UseGraphicAlpha: 1
 --- !u!114 &1436693061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164630,9 +164616,8 @@ GameObject:
   - component: {fileID: 1982935720}
   - component: {fileID: 1982935723}
   - component: {fileID: 1982935722}
-  - component: {fileID: 1982935721}
   m_Layer: 0
-  m_Name: FinalMSG
+  m_Name: message_win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164657,21 +164642,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -450}
   m_SizeDelta: {x: 700, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1982935721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1982935719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.91764706, g: 0.59607846, b: 0, a: 0.29411766}
-  m_EffectDistance: {x: 3, y: -3}
-  m_UseGraphicAlpha: 1
 --- !u!114 &1982935722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167452,9 +167422,8 @@ GameObject:
   - component: {fileID: 2128225179}
   - component: {fileID: 2128225182}
   - component: {fileID: 2128225181}
-  - component: {fileID: 2128225180}
   m_Layer: 0
-  m_Name: DeathMSG
+  m_Name: message_loose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167479,21 +167448,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -450}
   m_SizeDelta: {x: 700, y: 145}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2128225180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2128225178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.91764706, g: 0.59607846, b: 0, a: 0.29411766}
-  m_EffectDistance: {x: 3, y: -3}
-  m_UseGraphicAlpha: 1
 --- !u!114 &2128225181
 MonoBehaviour:
   m_ObjectHideFlags: 0

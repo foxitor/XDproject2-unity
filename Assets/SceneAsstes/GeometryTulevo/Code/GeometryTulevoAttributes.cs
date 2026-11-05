@@ -40,8 +40,20 @@ public class GeometryTulevoAttributes : MainGameAttributes {
         }
         TranslatedDifficulty = product;
     }
+    public override void RunGame() {
+        base.RunGame();
+    }
     public override void UpdateSituation() {
         SituationDisplay.text = $"Патронов найдено : {collectedBullets} / {bulletGoal}; Тяжкость : {TranslatedDifficulty}\nСлоёв обысканно : {layersSearched}";
+    }
+    public void onItemPickup(string item) {
+        switch (item) {
+            case "bullet" :
+                if (collectedBullets >= bulletGoal) {
+                    ManualMessageCamera("win", true);
+                } 
+            break;
+        }
     }
     public void OnNewLayer() {
         NewLayer?.Invoke();
@@ -58,6 +70,7 @@ public class GeometryTulevoAttributes : MainGameAttributes {
             Vector3 spawnPos = new Vector3(defPos.x + Random.Range(-0.25f, 0.25f), defPos.y + Random.Range(-0.25f, 0.25f), defPos.z);
             Instantiate(bulletObject, spawnPos, spawns[pick].rotation, spawns[pick]);
         }
+        StartCoroutine(MessageLocal("cheer", 0.75f));
     }
     public override void EndGame() {
         if (State == GameStates.game) {

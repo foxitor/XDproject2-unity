@@ -31,26 +31,36 @@ public class GTShigimaController : MonoBehaviour {
     public AudioClip[] radioPlaylist;
     public AudioClip deathCall;
     public AudioClip teleporing;
+    bool isRadioMuted = false;
     public AudioSource RadioPlayer;
     int radioChannel;
 
     bool hasOrb, hasGravityOrb, hasBox;
     GameObject curBox; 
     List<GameObject> boxMemory = new List<GameObject>();
-    bool deathPulsed, isReady;
+    bool deathPulsed;
 
     //Controlls
-    GlobalControlls Controls; Gamepad gamepad;
+    GlobalControlls Controls;
+    Gamepad gamepad;
+
+    bool pressingEnter => (Input.GetKey(KeyCode.Return) || Controls.Joystick.Y.ReadValue<float>() > 0);
+    bool pressingJump => (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0) || Controls.Joystick.A.ReadValue<float>() > 0);
+    bool pressingDash => (Input.GetKey(KeyCode.Z) || Input.GetMouseButton(1) || Controls.Joystick.B.ReadValue<float>() > 0);
+
+    bool pressingRadioPlaylist => (Input.GetKeyDown(KeyCode.M) || Controls.Joystick.Left.triggered);
+    bool pressingRadioMute => (Input.GetKeyDown(KeyCode.N) || Controls.Joystick.Up.triggered);
+
+    bool canInteractWithRadio => (!deathPulsed);
+
     void Awake() { 
         Controls = new GlobalControlls();
     }
     void OnEnable() { 
-        Controls.Joystick.Enable(); 
-        MainGameAttributes.OnLateGameStart += OnGameEnable;
+        Controls.Joystick.Enable();
     } 
     void OnDisable() { 
         Controls.Joystick.Disable(); 
-        MainGameAttributes.OnLateGameStart -= OnGameEnable;
     }
     
     void Start() {
@@ -63,11 +73,7 @@ public class GTShigimaController : MonoBehaviour {
         Phy = this.gameObject.GetComponent<Rigidbody2D>();
         currentSpeed = defaultSpeed;
     }
-    public void OnGameEnable() {
-        StartCoroutine(CameraMessenge(0, 2.5f));
-    }
     void Update() {
-        //ManageSpeed(); 
         ManageJumpos();
         if (dashAbility) { 
             if (dashRestore > 0) {
@@ -88,44 +94,46 @@ public class GTShigimaController : MonoBehaviour {
             visual.transform.Rotate(0, 0, compiledRotation * Time.deltaTime);
         } else { SnapToNearestAngle(); }
 
-        if (Attributes.collectedBullets >= Attributes.bulletGoal) {
-            cameraMessengeGroup.transform.GetChild(2).gameObject.SetActive(true);
-            isReady = true;
-        } 
-        if (Input.GetKey(KeyCode.Return) || Controls.Joystick.Y.ReadValue<float>() > 0) {
-            if (isReady && !deathPulsed) {
+        if (pressingEnter) {
+            if (Attributes.collectedBullets >= Attributes.bulletGoal && !deathPulsed) {
                 localCamera.gameObject.SetActive(false);
                 Attributes.EndGame();
             }
         }
-        if (Input.GetKeyDown(KeyCode.M)) {
-            radioChannel++;
-            if (radioChannel > radioPlaylist.Length-1) { radioChannel = 0; }
-            RadioPlayer.Stop();
-            RadioPlayer.clip = radioPlaylist[radioChannel];
-            RadioPlayer.Play();
+        if (canInteractWithRadio) {
+            if (pressingRadioPlaylist) {
+                radioChannel++;
+                if (radioChannel > radioPlaylist.Length-1) { radioChannel = 0; }
+                RadioPlayer.Stop();
+                RadioPlayer.clip = radioPlaylist[radioChannel];
+                RadioPlayer.Play();
+            }
+            if (pressingRadioMute) {
+                isRadioMuted = !isRadioMuted;
+                RadioPlayer.volume = isRadioMuted ? 0f : 1f;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.N)) { RadioPlayer.Stop(); }
     } 
     void FixedUpdate() {
-        if(Phy.velocity.y < -24.2f) { Phy.velocity = new Vector2(Phy.velocity.x, -24.2f); }
+        //Velosity Limits
+        if (Phy.velocity.y < -24.2f) { Phy.velocity = new Vector2(Phy.velocity.x, -24.2f); }
 
-        onGround = Physics2D.OverlapBox(transform.position + Vector3.down * (gravity ? -1 : 1) * 0.5f, Vector2.right * 1.1f + Vector2.up * groundTestRadius, 
-            0, obsticaleLayer);
-
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, (direction ? -Vector2.right : Vector2.right), 0.55f, obsticaleLayer);
-        frontObsticale = hit.collider != null;
-        
-        Vector3 startPoint = transform.position;
+        //Grounded
+        onGround = Physics2D.OverlapBox(transform.position + Vector3.down * (gravity ? -1 : 1) * 0.5f, 
+            Vector2.right * 1.1f + Vector2.up * groundTestRadius, 0, obsticaleLayer);
+        //FrontObsticale
+        Vector3 start_point = transform.position;
         Vector2 direction2D = direction ? -Vector2.right : Vector2.right;
         Vector3 direction3D = new Vector3(direction2D.x, direction2D.y, 0);
-        Vector3 endPoint = startPoint + direction3D * 0.55f;
-        Debug.DrawLine(startPoint, endPoint, Color.red);
+        float RayLength = 0.55f;
+        Vector3 endPoint = start_point + direction3D * RayLength;
 
-        if (frontObsticale && !deathPulsed) {
-            deathPulsed = true;
-            StartCoroutine(Dying());
-        }
+        RaycastHit2D hit = Physics2D.Raycast(start_point, direction2D, RayLength, obsticaleLayer);
+        Debug.DrawLine(start_point, endPoint, Color.red);
+
+        frontObsticale = hit.collider != null;
+
+        if (frontObsticale && !deathPulsed) { StartCoroutine(Dying()); }
     }
     void SnapToNearestAngle() {
         if (visual != null) {
@@ -136,14 +144,12 @@ public class GTShigimaController : MonoBehaviour {
     }
     void ManageJumpos() {
         if (canMove) {
-            if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0) || Controls.Joystick.A.ReadValue<float>() > 0)) {
+            if (pressingJump) {
                 JumpControllPressed();
             }
             if (dashAbility) {
-                if (Input.GetKey(KeyCode.Z) || Input.GetMouseButton(1) || Controls.Joystick.B.ReadValue<float>() > 0) {
-                    if (dashRestore <= 0) {
-                        StartCoroutine(Dash());
-                    }
+                if (pressingDash && dashRestore <= 0) {
+                    StartCoroutine(Dash());
                 }
             }
         }
@@ -155,11 +161,11 @@ public class GTShigimaController : MonoBehaviour {
                 if (hasOrb) {
                     mySource.PlayOneShot(orbHopSounds[Random.Range(0, orbHopSounds.Length)]);
                     impulseJump(false);
-                    VibrateController(0.1f, 0.1f, 0.1f);
+                    Attributes.StartGamepadVibration(0.1f, 0.1f, 0.1f);
                     hasOrb = false;
                 } if (hasGravityOrb) {
                     mySource.PlayOneShot(orbHopSounds[Random.Range(0, orbHopSounds.Length)]);
-                    VibrateController(0.1f, 0.1f, 0.1f);
+                    Attributes.StartGamepadVibration(0.1f, 0.1f, 0.1f);
                     Phy.velocity = Vector2.zero;
                     gravity = !gravity;
                     Phy.gravityScale = Phy.gravityScale * -1;
@@ -196,19 +202,16 @@ public class GTShigimaController : MonoBehaviour {
                         mySource.PlayOneShot(teleporing);
                         boxMemory.Clear();
                         if (Attributes.layersSearched >= Attributes.dashGoal) { dashAbility = true; }
-                        StartCoroutine(Messenge(0, 0.75f));
                     }
                 break;
                 case GTObjTypes.spike :
                     if (!deathPulsed) {
-                        StartCoroutine(Dying()); 
-                        deathPulsed = true;
+                        StartCoroutine(Dying());
                     }
                 break;
                 case GTObjTypes.saw :
                     if (!deathPulsed) {
                         StartCoroutine(Dying());
-                        deathPulsed = true;
                     } 
                 break;
                 case GTObjTypes.orb :
@@ -231,11 +234,13 @@ public class GTShigimaController : MonoBehaviour {
                     Phy.gravityScale = Phy.gravityScale * -1;
                 break;
                 case GTObjTypes.item :
-                    if (Modifier.objectSubtype == "Bullet") {
+                    string itemId = Modifier.objectSubtype.ToLower();
+                    if (itemId == "bullet") {
                         Attributes.collectedBullets++;
                         mySource.PlayOneShot(coinSounds[Random.Range(0, coinSounds.Length)]);
                         Destroy(Modifier.gameObject);
                     }
+                    Attributes.onItemPickup(itemId);
                 break;
             }
         }
@@ -260,42 +265,28 @@ public class GTShigimaController : MonoBehaviour {
         mySource.PlayOneShot(dashSounds[Random.Range(0, dashSounds.Length)]);
         currentSpeed = superSpeed;
         dashRestore = 2.5f;
-        VibrateController(0.25f, 0.25f, 0.25f);
+        Attributes.StartGamepadVibration(0.25f, 0.25f, 0.25f);
         yield return new WaitForSeconds(0.25f);
         currentSpeed = defaultSpeed;
     }
-    IEnumerator Messenge(int order, float liveTime) {
-        messengeGroup.transform.GetChild(order).gameObject.SetActive(true);
-        VibrateController(0.25f, 0.25f, 0.15f);
-        yield return new WaitForSeconds(liveTime);
-        messengeGroup.transform.GetChild(order).gameObject.SetActive(false);
-    }
-    IEnumerator CameraMessenge(int order, float liveTime) {
-        cameraMessengeGroup.transform.GetChild(order).gameObject.SetActive(true);
-        yield return new WaitForSeconds(liveTime);
-        cameraMessengeGroup.transform.GetChild(order).gameObject.SetActive(false);
-    }
     IEnumerator Dying() {
-        Phy.bodyType = RigidbodyType2D.Static; 
-        cameraMessengeGroup.transform.GetChild(2).gameObject.SetActive(false);
+        deathPulsed = true;
+        canMove = false;
         RadioPlayer.Stop();
-        canMove = false; 
+        Phy.bodyType = RigidbodyType2D.Static;
+
+        Attributes.ManualMessageCamera("start", false);
+        Attributes.ManualMessageCamera("win", false);
+        Attributes.ManualMessageLocal("cheer", false);
+        Attributes.ManualMessageCamera("loose", true);
+
         mySource.PlayOneShot(deathCall);
-        StartCoroutine(CameraMessenge(1, 4f));
-        VibrateController(0f, 0.75f, 0.2f);
+        
+        Attributes.StartGamepadVibration(0f, 0.75f, 0.2f);
         yield return new WaitForSeconds(0.2f);
-        VibrateController(0.75f, 0f, 0.2f);
+        Attributes.StartGamepadVibration(0.75f, 0f, 0.2f);
         yield return new WaitForSeconds(4f - 0.2f);
+
         Attributes.ReloadOrExit();
     } 
-    public void VibrateController(float leftMotor, float rightMotor, float duration) {
-        if (gamepad != null) { 
-            gamepad.SetMotorSpeeds(leftMotor, rightMotor); Invoke("StopVibration", duration); 
-        }
-    }
-    public void StopVibration() {
-        if (gamepad != null) { 
-            gamepad.SetMotorSpeeds(0, 0); 
-        }
-    }
 }

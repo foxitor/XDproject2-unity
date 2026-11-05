@@ -24,6 +24,8 @@ public class MainGameAttributes : MonoBehaviour {
     [Header("Display")]
     public Text SituationDisplay;
     public string TranslatedDifficulty;
+    public Transform CameraMessageGroup;
+    public Transform LocalMessageGroup;
 
     [Header("Gamepad support")]
     public GameObject menuGamePadGroup;
@@ -123,7 +125,7 @@ public class MainGameAttributes : MonoBehaviour {
             }
         }
     }
-    public void RunGame() {
+    public virtual void RunGame() {
         if (State == GameStates.preGame) {
             OnGameStart?.Invoke();
             State = GameStates.game;
@@ -139,6 +141,7 @@ public class MainGameAttributes : MonoBehaviour {
             OnDetailDraw(DetalizationLevels.high);
             if (WearableValue <= 0) { WearableValue = 1; } 
             PlayerRenderer.sprite = GameWearables[WearableValue - 1]; 
+            StartCoroutine(MessageCamera("start", 5f));
         }
     }
     //Game
@@ -207,6 +210,8 @@ public class MainGameAttributes : MonoBehaviour {
     public virtual void UpdateSituation() {
         SituationDisplay.text = $"MainGameAttribute is runs this process. difficulty : {TranslatedDifficulty}";
     }
+#endregion
+#region EndingGame
     public virtual void EndGame() {
         if (State == GameStates.game) {
             State = GameStates.endGame;
@@ -246,20 +251,65 @@ public class MainGameAttributes : MonoBehaviour {
         }
     }
     public virtual void SaveSessionProgress() {
-        //saving alghorytm in override.
+        //override this.
     }
     public void ReloadOrExit() {
         if (State == GameStates.preGame || State == GameStates.endGame) {
-            if (gamepad != null) {
-                gamepad.SetMotorSpeeds(0, 0); 
-            }
+            StopGamepadVibration();
             SceneManager.LoadScene("MainMenu");
         } else {
-            if (gamepad != null) {
-                gamepad.SetMotorSpeeds(0, 0); 
-            }
+            StopGamepadVibration();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+    }
+#endregion
+#region Util
+    public void ManualMessageCamera(string message_name, bool value) {
+        if (CameraMessageGroup == null) { ReportError("Manual Messaging Camera is imposible, CameraGroup is null!"); return; }
+        GameObject Target = CameraMessageGroup.Find($"message_{message_name}").gameObject;
+        if (Target == null) { ReportError($"Manual Messaging is imposible, message with name \"message_{message_name}\" is not found!"); return; }
+
+        Target.SetActive(value);
+    }
+    public void ManualMessageLocal(string message_name, bool value) {
+        if (LocalMessageGroup == null) { ReportError("Manual Messaging Local is imposible, CameraGroup is null!"); return; }
+        GameObject Target = LocalMessageGroup.Find($"message_{message_name}").gameObject;
+        if (Target == null) { ReportError($"Manual Messaging is imposible, message with name \"message_{message_name}\" is not found!"); return; }
+
+        Target.SetActive(value);
+    }
+    public IEnumerator MessageCamera(string message_name, float duration) {
+        if (CameraMessageGroup == null) { ReportError("Messaging Camera is imposible, CameraGroup is null!"); yield break; }
+        GameObject Target = CameraMessageGroup.Find($"message_{message_name}").gameObject;
+        if (Target == null) { ReportError($"Messaging is imposible, message with name \"message_{message_name}\" is not found!"); yield break; }
+
+        Target.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        Target.SetActive(false);
+    }
+    public IEnumerator MessageLocal(string message_name, float duration, bool vibrate = false) {
+        if (LocalMessageGroup == null) {  ReportError("Messaging Local is imposible, LocalGroup is null!"); yield break; }
+        GameObject Target = LocalMessageGroup.Find($"message_{message_name}").gameObject;
+        if (Target == null) { ReportError($"Messaging is imposible, message with name \"message_{message_name}\" is not found!"); yield break; }
+
+        Target.SetActive(true);
+        if (vibrate) { StartGamepadVibration(0.25f, 0.25f, 0.15f); }
+        yield return new WaitForSeconds(duration);
+        Target.SetActive(false);
+    }
+
+    public void StartGamepadVibration(float left_power, float right_power, float duration) {
+        if (gamepad == null) return;
+        gamepad.SetMotorSpeeds(left_power, right_power);
+        Invoke("StopGamepadVibration", duration);
+    }
+    public void StopGamepadVibration() {
+        if (gamepad == null) return;
+        gamepad.SetMotorSpeeds(0, 0);
+    }
+
+    public void ReportError(string message) {
+        Debug.LogError(message);
     }
 }
 #endregion
