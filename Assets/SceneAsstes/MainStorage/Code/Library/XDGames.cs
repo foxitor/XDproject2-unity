@@ -35,5 +35,15 @@ namespace XD.Games {
         interactive, item,
         wallpaintedTip
     }
+    //CL
+    public enum CLObjTypes {
+        rock, egg, liqud
+    }
+    public enum ChertoletEvents {
+        Rocks,
+        Chicken,
+        Liquid,
+        Storm
+    }
     #endregion
 }

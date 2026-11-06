@@ -8,36 +8,70 @@ public class ChertoletAttributes : MainGameAttributes {
     [Header("UniqeSettings")]
     public ChertoletEvents CurrentEvent;
     public Slider ProgressBar;
+    FunkinProgressBar ProgressBarManager;
     public float FlightTime = 0.0f;
     public float WholeFlightTime = 0.0f;
     public float EventDelay = 15.0f;
     public int CurrentLap = 0;
     public int MaxLaps = 5;
 
+    [Header("ObsticaleSpawner")]
+    public Sprite[] RockSprites;
+    public GameObject RockPrefab;
+    public Transform TempHolder;
+    bool doSpawnObsticales = true;
+    public float obsticaleSpawnInterval = 2.0f;
+    float obsticaleIntervalMultiplier = 1.0f;
+    float currentObsticaleCooldown = 2.0f;
+    float obsticaleSpeedMultiplier = 1.0f;
+    [Range(0, 100)]
+    public float AnomalyRockProcent = 5f;
+    int PastObsticaleCoord = 0;
+
+    public GameObject StormParticleStorage;
+
+    bool canStorm => Difficulty == GameDifficulties.hard;
+    bool isStorming;
+    bool isDefaultEvent;
+    bool isChickenEvent;
+    bool isLiquidEvent;
+
     public static event System.Action NewLayer;
 
     public override void TranslateDifficulty() {
+        ProgressBarManager = ProgressBar.gameObject.GetComponent<FunkinProgressBar>();
         string product = "";
         switch (Difficulty) {
             case GameDifficulties.easy : 
                 product = "Попутный ветер"; 
                 EventDelay = 10.0f;
                 MaxLaps = 4;
+                obsticaleIntervalMultiplier = 1.6f;
+                obsticaleSpeedMultiplier = 1.0f;
+                ProgressBarManager.EndTreshold = 0.25f;
                 break;
             case GameDifficulties.normal : 
                 product = "Канон"; 
                 EventDelay = 15.0f;
                 MaxLaps = 5;
+                obsticaleIntervalMultiplier = 1.2f;
+                obsticaleSpeedMultiplier = 1.3f;
+                ProgressBarManager.EndTreshold = 0.005f;
                 break;
             case GameDifficulties.hard : 
                 product = "Буря."; 
                 EventDelay = 20.0f;
                 MaxLaps = 4;
+                obsticaleIntervalMultiplier = 1.2f;
+                obsticaleSpeedMultiplier = 1.2f;
+                ProgressBarManager.EndTreshold = 0.125f;
                 break;
             case GameDifficulties.test : 
                 product = "dev test"; 
                 EventDelay = 3.0f;
                 MaxLaps = 1;
+                obsticaleIntervalMultiplier = 1.0f;
+                ProgressBarManager.EndTreshold = 0.05f;
                 break;
             default : product = "unknown"; break;
         }
@@ -49,13 +83,74 @@ public class ChertoletAttributes : MainGameAttributes {
         if (FlightTime >= EventDelay) {
             FlightTime = 0.0f;
             CurrentLap++;
+            PickNewEvent();
         }
         ProgressBar.value = (WholeFlightTime/(EventDelay * MaxLaps));
-        SituationDisplay.text = $"Вертолётик брбрбрбрбр; Тяжкость : {TranslatedDifficulty}\nДо нового События - {(EventDelay - FlightTime).ToString("F1")} сек, Событий {CurrentLap}/{MaxLaps}";
+        SituationDisplay.text = $"Тяжкость : {TranslatedDifficulty}\nДо нового События - {(EventDelay - FlightTime).ToString("F1")} сек, Событий {CurrentLap}/{MaxLaps}";
     }
-    public void OnNewLayer() {
-        NewLayer?.Invoke();
+    public override void RunGame() {
+        base.RunGame();
+        if (canStorm) { CurrentEvent = ChertoletEvents.Storm; ResetEventBools(); isStorming = true; StormParticleStorage.SetActive(true); }
     }
+    void Update() {
+        base.Update();
+        if (State == GameStates.game && doSpawnObsticales) {
+            currentObsticaleCooldown -= Time.deltaTime;
+            if (currentObsticaleCooldown <= 0) {
+                SpawnObsticale();
+                if (isStorming) { SpawnObsticale(); }
+                currentObsticaleCooldown = obsticaleSpawnInterval * obsticaleIntervalMultiplier;
+            }
+        }
+    }
+    void SpawnObsticale() {
+        bool isAnomaly = (Random.value < AnomalyRockProcent * (isStorming ? 2 : 1) / 100);
+        int YCoord = FindNewObsticaleCoord();
+        Vector2 spawnPosition = new Vector2(11, YCoord);
+
+        GameObject Rock = Instantiate(RockPrefab, (Vector3)spawnPosition, Quaternion.identity, TempHolder);
+        Rock.GetComponent<ChertoletTaggedObject>().obsticaleSpeed *= obsticaleSpeedMultiplier;
+        Rock.GetComponent<SpriteRenderer>().sprite = RockSprites[Random.Range(0, RockSprites.Length)];
+        if (isAnomaly) {
+            Rock.transform.GetChild(0).localScale = new Vector3(3.5f, 3.5f, 3.5f);
+            Rock.GetComponent<SpriteRenderer>().color = new Color(0.9f, 0.12f, 0.1f, 1.0f);
+            Rock.GetComponent<ChertoletTaggedObject>().obsticaleSpeed += 3f;
+        }
+    }
+    int FindNewObsticaleCoord() {
+        int output = Random.Range(-3, 4);
+        int max_attempts = 5;
+        int attempt = 0;
+        while (Mathf.Abs(PastObsticaleCoord - output) < 2 && attempt < max_attempts) {
+            output = Random.Range(-3, 4);
+            attempt++;
+        }
+        PastObsticaleCoord = output;
+        return output;
+    }
+    void PickNewEvent() {
+        int random = Random.Range(0, 2);
+        ChertoletEvents output = ChertoletEvents.Rocks;
+        ResetEventBools();
+        switch (random) {
+            case 0 : output = ChertoletEvents.Rocks; isDefaultEvent = true; break;
+            case 1 : output = ChertoletEvents.Chicken; isChickenEvent = true; break;
+            case 2 : output = ChertoletEvents.Liquid; isLiquidEvent = true; break;
+            case 3 : 
+                if (canStorm) { 
+                    output = ChertoletEvents.Storm; 
+                    isStorming = true; 
+                    StormParticleStorage.SetActive(true);
+                } else {
+                    output = ChertoletEvents.Rocks;
+                    isDefaultEvent = true; 
+                } break;
+        }
+        CurrentEvent = output;
+    }
+    void ResetEventBools() { StormParticleStorage.SetActive(false); isStorming = false; isDefaultEvent = false; isChickenEvent = false; isLiquidEvent = false; }
+#endregion
+#region EndSession
     public override void EndGame() {
         if (State == GameStates.game) {
             State = GameStates.endGame;
@@ -191,9 +286,3 @@ public class ChertoletAttributes : MainGameAttributes {
     }
 }
 #endregion
-[System.Serializable]
-public enum ChertoletEvents {
-    Rocks,
-    Chicken,
-    Liquid
-}

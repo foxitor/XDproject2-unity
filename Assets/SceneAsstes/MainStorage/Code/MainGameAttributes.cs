@@ -82,7 +82,7 @@ public class MainGameAttributes : MonoBehaviour {
         Controls.Joystick.Down.performed -= ctx => ReloadOrExit();
     }
 
-    void Start() {
+    public void Start() {
         gamepad = Gamepad.current;
         if (gamepad == null) { menuGamePadGroup.SetActive(false); }
         AssignDifficulty(1);
@@ -145,7 +145,7 @@ public class MainGameAttributes : MonoBehaviour {
         }
     }
     //Game
-    void Update() {
+    public void Update() {
         if (Input.GetKey(KeyCode.Escape)) {
             ReloadOrExit();
         }

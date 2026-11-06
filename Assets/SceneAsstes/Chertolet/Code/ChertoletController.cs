@@ -18,12 +18,29 @@ public class ChertoletController : MonoBehaviour {
     public GameObject cameraMessengeGroup;
 
     public LayerMask obsticaleLayer;
+    bool deathPulsed;
+    public AudioClip[] deathCalls;
 
+    //Controlls
+    GlobalControlls Controls;
+    Gamepad gamepad;
+
+    bool pressingEnter => (Input.GetKey(KeyCode.Return) || Controls.Joystick.Y.ReadValue<float>() > 0);
+    bool pressingJump => (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0) || Controls.Joystick.A.triggered);
+
+    bool pressingRadioPlaylist => (Input.GetKeyDown(KeyCode.M) || Controls.Joystick.Left.triggered);
+    bool pressingRadioMute => (Input.GetKeyDown(KeyCode.N) || Controls.Joystick.Up.triggered);
+
+    bool canInteractWithRadio => (!deathPulsed);
+
+    void Awake() { 
+        Controls = new GlobalControlls();
+    }
     void OnEnable() { 
-        MainGameAttributes.OnLateGameStart += OnGameEnable;
+        Controls.Joystick.Enable();
     } 
     void OnDisable() { 
-        MainGameAttributes.OnLateGameStart -= OnGameEnable;
+        Controls.Joystick.Disable(); 
     }
 
     void Start() {
@@ -31,14 +48,11 @@ public class ChertoletController : MonoBehaviour {
         mySource = gameObject.GetComponent<AudioSource>();
         visual = transform.GetChild(0).gameObject;
         visualRenderer = visual.GetComponent<SpriteRenderer>();
-        Phy = this.gameObject.GetComponent<Rigidbody2D>();
+        Phy = gameObject.GetComponent<Rigidbody2D>();
         obsticaleLayer = LayerMask.GetMask("Obsticale");
     }
-    public void OnGameEnable() {
-        StartCoroutine(CameraMessenge(0, 2.5f));
-    }
     void Update() {
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) { 
+        if (pressingJump) { 
             Flap(); 
         }
 
@@ -54,7 +68,7 @@ public class ChertoletController : MonoBehaviour {
         }
         if (Attributes.CurrentLap >= Attributes.MaxLaps) {
             cameraMessengeGroup.transform.GetChild(2).gameObject.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.Return)) {
+            if (pressingEnter) {
                 Attributes.EndGame();
             }
         }
@@ -64,20 +78,39 @@ public class ChertoletController : MonoBehaviour {
             Phy.velocity = Vector2.up * FlapStrength;
         }
     }
-    IEnumerator FeedMessenge(int order, float liveTime) {
-        feedMessengeGroup.transform.GetChild(order).gameObject.SetActive(true);
-        //VibrateController(0.25f, 0.25f, 0.15f);
-        yield return new WaitForSeconds(liveTime);
-        feedMessengeGroup.transform.GetChild(order).gameObject.SetActive(false);
-    }
-    IEnumerator CameraMessenge(int order, float liveTime) {
-        cameraMessengeGroup.transform.GetChild(order).gameObject.SetActive(true);
-        yield return new WaitForSeconds(liveTime);
-        cameraMessengeGroup.transform.GetChild(order).gameObject.SetActive(false);
-    }
     void OnTriggerEnter2D(Collider2D collision) {
         if ((obsticaleLayer.value & (1 << collision.gameObject.layer)) > 0) {
-            Debug.Log("dead");
+            if (!deathPulsed) {
+                StartCoroutine(Dying());
+            }
         }
+        ChertoletTaggedObject Modifier = collision.gameObject.GetComponent<ChertoletTaggedObject>();
+        if (Modifier != null) {
+            switch (Modifier.Type) {
+                case CLObjTypes.rock :
+                case CLObjTypes.egg :
+                case CLObjTypes.liqud :
+                    if (!deathPulsed) {
+                        StartCoroutine(Dying());
+                    }
+                break;
+            }
+        }
+    }
+    IEnumerator Dying() {
+        deathPulsed = true;
+        canMove = false;
+        Phy.bodyType = RigidbodyType2D.Static;
+
+        Attributes.ManualMessageCamera("start", false);
+        Attributes.ManualMessageCamera("win", false);
+        Attributes.ManualMessageCamera("loose", true);
+
+        mySource.PlayOneShot(deathCalls[Random.Range(0, deathCalls.Length)]);
+        
+        Attributes.StartGamepadVibration(1f, 1f, 1f);
+        yield return new WaitForSeconds(1.5f);
+
+        Attributes.ReloadOrExit();
     }
 }
